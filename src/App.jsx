@@ -7,6 +7,7 @@ import About from "./pages/About";
 import Skills from "./pages/Skills";
 import Projects from "./pages/Projects";
 import Contact from "./pages/Contact";
+import CustomCursor from "./components/common/CustomCursor";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,7 +27,7 @@ function App() {
       
       <div className={`min-h-screen ${isLoading ? 'overflow-hidden' : ''}`}>
         <Navbar />
-        
+        <CustomCursor />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />

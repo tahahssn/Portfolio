@@ -188,16 +188,16 @@ const Preloader = () => {
       <div className="relative z-10 text-center px-4">
         <div 
           ref={nameRef}
-          className="text-5xl md:text-7xl font-bold text-white mb-4 tracking-tight opacity-0"
+          className="text-3xl md:text-6xl text-white font-[GCGudlakDemo-SemiBold] mb-1 tracking-wider opacity-0"
         >
           Taha Hassan
         </div>
         
         <div 
           ref={titleRef}
-          className="text-xl md:text-2xl text-gray-300 tracking-wider opacity-0"
+          className="text-1xl text-gray-300 font-[doner] tracking-wider opacity-0"
         >
-          AI/ML Enthusiast, Frontend Developer
+          AI/ML Enthusiast | Frontend Developer
         </div>
       </div>
 

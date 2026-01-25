@@ -23,13 +23,13 @@
   font-style: normal;
 }
 
-/* @font-face {
-  font-family: "honer-those";
-  src: url("/fonts/honer-those.otf") format("opentype");
-  font-weight: 500;
+@font-face {
+  font-family: "GCGudlakDemo-SemiBold";
+  src: url("/fonts/GCGudlakDemo-SemiBold-BF695cd59bc5211.ttf") format("truetype");
   font-style: normal;
 }
 
+/* 
 @font-face {
   font-family: "honer-those";
   src: url("/fonts/honer-those.otf") format("opentype");

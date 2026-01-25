@@ -5,16 +5,11 @@ const Preloader = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [percentage, setPercentage] = useState(0);
   const preloaderRef = useRef(null);
-  const gradient1Ref = useRef(null); // Top-left gradient
-  const gradient2Ref = useRef(null); // Bottom-right gradient
+  const gradient1Ref = useRef(null);
+  const gradient2Ref = useRef(null);
   const percentageRef = useRef(null);
-  
-  // Colors
-  const colors = {
-    gradient1: "#94bcf7", // Blue
-    gradient2: "#b4c3d9", // Light blue-gray
-    dark: "#0a0a0a"
-  };
+  const nameRef = useRef(null);
+  const titleRef = useRef(null);
 
   useEffect(() => {
     const tl = gsap.timeline();
@@ -36,42 +31,85 @@ const Preloader = () => {
       opacity: 1
     });
     
-    // 1. FIRST: Both gradients expand from their corners
+    // RESET: Text elements
+    gsap.set(nameRef.current, {
+      opacity: 0,
+      y: 20
+    });
+    
+    gsap.set(titleRef.current, {
+      opacity: 0,
+      y: 20
+    });
+    
+    // 1. Gradients expand from corners
     tl.to(gradient1Ref.current, {
       width: "100%",
       height: "100%",
-      duration: 1.5,
+      duration: 3,
       ease: "power2.out"
     }, 0);
     
     tl.to(gradient2Ref.current, {
       width: "100%",
       height: "100%",
-      duration: 1.5,
+      duration: 3,
       ease: "power2.out"
     }, 0);
     
-    // 2. THEN: They blend together in the middle
+    // 2. Gradients blend together
     tl.to([gradient1Ref.current, gradient2Ref.current], {
       opacity: 0.7,
-      duration: 1,
+      duration: 2,
       ease: "power2.inOut"
     }, 0.5);
 
-    // 3. Percentage counter - smooth increase
-    const duration = 2500; // 2.5 seconds total
+    // 3. Animate text in center
+    tl.to(nameRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 1.2,
+      ease: "power3.out"
+    }, 1);
+
+    tl.to(titleRef.current, {
+      opacity: 1,
+      y: 0,
+      duration: 1.2,
+      ease: "power3.out"
+    }, 1.2);
+
+    // 4. Percentage counter
+    const duration = 2500;
     let percent = 0;
     const interval = setInterval(() => {
-      percent += 100 / (duration / 50); // Smooth increment
+      percent += 100 / (duration / 50);
       if (percent > 100) percent = 100;
       setPercentage(Math.floor(percent));
       
-      // Subtle pulse on percentage change
+      // Pulse effect on percentage
       if (percentageRef.current) {
         gsap.to(percentageRef.current, {
           scale: 1.05,
-          duration: 0.1,
+          duration: 0.5,
           ease: "power1.out",
+          yoyo: true,
+          repeat: 1
+        });
+      }
+      
+      // Text glow effects
+      if (percent >= 50 && percent < 51) {
+        gsap.to(nameRef.current, {
+          duration: 0.5,
+          yoyo: true,
+          repeat: 1
+        });
+      }
+      
+      if (percent >= 80 && percent < 81) {
+        gsap.to(titleRef.current, {
+          duration: 0.5,
           yoyo: true,
           repeat: 1
         });
@@ -80,30 +118,30 @@ const Preloader = () => {
       if (percent >= 100) {
         clearInterval(interval);
         
-        // Wait 300ms at 100%, then fade out
+        // Final text animation
+        gsap.to([nameRef.current, titleRef.current], {
+          opacity: 0.8,
+          scale: 0.98,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+        
+        // Fade out preloader
         setTimeout(() => {
-          // Fade out the entire preloader smoothly
           gsap.to(preloaderRef.current, {
             opacity: 0,
             duration: 0.8,
             ease: "power2.inOut",
             onComplete: () => {
               setIsVisible(false);
-              // Show home page smoothly by enabling scroll
               document.body.style.overflow = 'auto';
-              
-              // Optional: Add a subtle fade-in for homepage content
-              gsap.fromTo("body > *:not(#root)",
-                { opacity: 0 },
-                { opacity: 1, duration: 0.5, delay: 0.2 }
-              );
             }
           });
-        }, 300);
+        }, 800);
       }
-    }, 50); // Update every 50ms for smoothness
+    }, 50);
 
-    // Disable scroll during preloader
+    // Disable scroll
     document.body.style.overflow = 'hidden';
     document.body.style.height = '100vh';
     
@@ -120,50 +158,53 @@ const Preloader = () => {
   return (
     <div 
       ref={preloaderRef}
-      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-[#0a0a0a]"
+      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-black"
     >
-      {/* Background with two expanding gradients */}
+      {/* Background gradients */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* First gradient - expands from TOP-LEFT corner */}
+        {/* Top-left gradient */}
         <div 
           ref={gradient1Ref}
-          className="absolute top-0 left-0 rounded-br-full"
+          className="absolute top-0 left-0 rounded-br-full blur-[60px]"
           style={{
-            background: `radial-gradient(circle at top left, ${colors.gradient1} 0%, transparent 70%)`,
-            opacity: 1,
-            filter: 'blur(60px)',
-            transformOrigin: 'top left'
+            background: 'radial-gradient(circle at top left, #94bcf7 0%, transparent 70%)'
           }}
         />
         
-        {/* Second gradient - expands from BOTTOM-RIGHT corner */}
+        {/* Bottom-right gradient */}
         <div 
           ref={gradient2Ref}
-          className="absolute bottom-0 right-0 rounded-tl-full"
+          className="absolute bottom-0 right-0 rounded-tl-full blur-[60px]"
           style={{
-            background: `radial-gradient(circle at bottom right, ${colors.gradient2} 0%, transparent 70%)`,
-            opacity: 1,
-            filter: 'blur(60px)',
-            transformOrigin: 'bottom right'
+            background: 'radial-gradient(circle at bottom right, #b4c3d9 0%, transparent 70%)'
           }}
         />
         
-        {/* Overlay blur for smooth blending */}
+        {/* Blur overlay */}
         <div className="absolute inset-0 backdrop-blur-[30px] bg-black/20" />
       </div>
 
-      {/* Percentage Counter - Bottom Right Corner */}
+      {/* Center text */}
+      <div className="relative z-10 text-center px-4">
+        <div 
+          ref={nameRef}
+          className="text-5xl md:text-7xl font-bold text-white mb-4 tracking-tight opacity-0"
+        >
+          Taha Hassan
+        </div>
+        
+        <div 
+          ref={titleRef}
+          className="text-xl md:text-2xl text-gray-300 tracking-wider opacity-0"
+        >
+          AI/ML Enthusiast, Frontend Developer
+        </div>
+      </div>
+
+      {/* Percentage counter */}
       <div 
         ref={percentageRef}
-        className="absolute bottom-8 right-8 z-10"
-        style={{
-          fontSize: '5rem',
-          fontWeight: 300,
-          color: 'rgba(255, 255, 255, 0.7)',
-          fontFamily: "'Inter', sans-serif",
-          letterSpacing: '-0.05em',
-          textShadow: '0 2px 10px rgba(0,0,0,0.3)'
-        }}
+        className="absolute bottom-0 right-8 z-10 text-[5.5rem] font-thin text-white/70 font-[honer-those]"
       >
         {percentage}%
       </div>

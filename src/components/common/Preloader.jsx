@@ -31,7 +31,7 @@ const Preloader = () => {
         x: "100%", 
         y: "100%",
         opacity: 0.6,
-        duration: 8,
+        duration: 5,
         repeat: -1,
         ease: "none"
       }
@@ -48,7 +48,7 @@ const Preloader = () => {
         x: "-100%", 
         y: "-100%",
         opacity: 0.6,
-        duration: 10,
+        duration: 5,
         repeat: -1,
         ease: "none"
       },

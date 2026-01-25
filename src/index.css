@@ -1,0 +1,53 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "honer-those";
+  src: url("/fonts/honer-those.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "BeStrong";
+  src: url("/fonts/BeStrong-MVYAv.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "doner";
+  src: url("/fonts/doner-regulardisplay.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+/* @font-face {
+  font-family: "honer-those";
+  src: url("/fonts/honer-those.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "honer-those";
+  src: url("/fonts/honer-those.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "honer-those";
+  src: url("/fonts/honer-those.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "honer-those";
+  src: url("/fonts/honer-those.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+} */
+

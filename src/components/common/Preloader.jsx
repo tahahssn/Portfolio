@@ -5,71 +5,68 @@ const Preloader = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [percentage, setPercentage] = useState(0);
   const preloaderRef = useRef(null);
-  const gradient1Ref = useRef(null);
-  const gradient2Ref = useRef(null);
+  const gradient1Ref = useRef(null); // Top-left gradient
+  const gradient2Ref = useRef(null); // Bottom-right gradient
   const percentageRef = useRef(null);
   
-  // Two minimalist gradient colors
+  // Colors
   const colors = {
-    primary: "#94bcf7", // Your theme blue
-    secondary: "#b4c3d9", // Your theme light blue-gray
-    dark: "#0a0a0d" // Dark background
+    gradient1: "#94bcf7", // Blue
+    gradient2: "#b4c3d9", // Light blue-gray
+    dark: "#0a0a0a"
   };
 
   useEffect(() => {
-    // Animate two gradients blending diagonally
     const tl = gsap.timeline();
     
-    // First gradient animation (coming from top-left)
-    tl.fromTo(gradient1Ref.current,
-      { 
-        x: "-100%", 
-        y: "-100%",
-        opacity: 0.8 
-      },
-      { 
-        x: "100%", 
-        y: "100%",
-        opacity: 0.6,
-        duration: 5,
-        repeat: -1,
-        ease: "none"
-      }
-    );
+    // RESET: Both gradients start small at their corners
+    gsap.set(gradient1Ref.current, {
+      width: "0%",
+      height: "0%",
+      top: "0%",
+      left: "0%",
+      opacity: 1
+    });
     
-    // Second gradient animation (coming from bottom-right)
-    tl.fromTo(gradient2Ref.current,
-      { 
-        x: "100%", 
-        y: "100%",
-        opacity: 0.8 
-      },
-      { 
-        x: "-100%", 
-        y: "-100%",
-        opacity: 0.6,
-        duration: 5,
-        repeat: -1,
-        ease: "none"
-      },
-      0 // Start at same time
-    );
+    gsap.set(gradient2Ref.current, {
+      width: "0%",
+      height: "0%",
+      bottom: "0%",
+      right: "0%",
+      opacity: 1
+    });
+    
+    // 1. FIRST: Both gradients expand from their corners
+    tl.to(gradient1Ref.current, {
+      width: "100%",
+      height: "100%",
+      duration: 1.5,
+      ease: "power2.out"
+    }, 0);
+    
+    tl.to(gradient2Ref.current, {
+      width: "100%",
+      height: "100%",
+      duration: 1.5,
+      ease: "power2.out"
+    }, 0);
+    
+    // 2. THEN: They blend together in the middle
+    tl.to([gradient1Ref.current, gradient2Ref.current], {
+      opacity: 0.7,
+      duration: 1,
+      ease: "power2.inOut"
+    }, 0.5);
 
-    // Percentage counter - smooth increase
-    const duration = 3000; // 3 seconds total
-    const increment = 100 / (duration / 16); // 60fps
-    
-    let startTime = null;
-    let animationFrame;
-    
-    const animatePercentage = (timestamp) => {
-      if (!startTime) startTime = timestamp;
-      const elapsed = timestamp - startTime;
-      const newPercentage = Math.min((elapsed / duration) * 100, 100);
+    // 3. Percentage counter - smooth increase
+    const duration = 2500; // 2.5 seconds total
+    let percent = 0;
+    const interval = setInterval(() => {
+      percent += 100 / (duration / 50); // Smooth increment
+      if (percent > 100) percent = 100;
+      setPercentage(Math.floor(percent));
       
-      setPercentage(Math.floor(newPercentage));
-      
-      // Smooth number animation
+      // Subtle pulse on percentage change
       if (percentageRef.current) {
         gsap.to(percentageRef.current, {
           scale: 1.05,
@@ -80,30 +77,41 @@ const Preloader = () => {
         });
       }
       
-      if (newPercentage < 100) {
-        animationFrame = requestAnimationFrame(animatePercentage);
-      } else {
-        // When 100% reached, fade out smoothly
+      if (percent >= 100) {
+        clearInterval(interval);
+        
+        // Wait 300ms at 100%, then fade out
         setTimeout(() => {
+          // Fade out the entire preloader smoothly
           gsap.to(preloaderRef.current, {
             opacity: 0,
-            duration: 1.2,
+            duration: 0.8,
             ease: "power2.inOut",
-            onComplete: () => setIsVisible(false)
+            onComplete: () => {
+              setIsVisible(false);
+              // Show home page smoothly by enabling scroll
+              document.body.style.overflow = 'auto';
+              
+              // Optional: Add a subtle fade-in for homepage content
+              gsap.fromTo("body > *:not(#root)",
+                { opacity: 0 },
+                { opacity: 1, duration: 0.5, delay: 0.2 }
+              );
+            }
           });
-        }, 500); // Small pause at 100%
+        }, 300);
       }
-    };
-    
-    animationFrame = requestAnimationFrame(animatePercentage);
-    
+    }, 50); // Update every 50ms for smoothness
+
     // Disable scroll during preloader
     document.body.style.overflow = 'hidden';
+    document.body.style.height = '100vh';
     
     return () => {
       tl.kill();
-      if (animationFrame) cancelAnimationFrame(animationFrame);
+      clearInterval(interval);
       document.body.style.overflow = 'auto';
+      document.body.style.height = 'auto';
     };
   }, []);
 
@@ -114,30 +122,34 @@ const Preloader = () => {
       ref={preloaderRef}
       className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-[#0a0a0a]"
     >
-      {/* Background with two blending gradients */}
+      {/* Background with two expanding gradients */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* First gradient - diagonal movement */}
+        {/* First gradient - expands from TOP-LEFT corner */}
         <div 
           ref={gradient1Ref}
-          className="absolute w-[150%] h-[150%] blur-[80px]"
+          className="absolute top-0 left-0 rounded-br-full"
           style={{
-            background: `radial-gradient(circle, ${colors.primary} 0%, transparent 70%)`,
-            opacity: 0.6
+            background: `radial-gradient(circle at top left, ${colors.gradient1} 0%, transparent 70%)`,
+            opacity: 1,
+            filter: 'blur(60px)',
+            transformOrigin: 'top left'
           }}
         />
         
-        {/* Second gradient - opposite diagonal movement */}
+        {/* Second gradient - expands from BOTTOM-RIGHT corner */}
         <div 
           ref={gradient2Ref}
-          className="absolute w-[150%] h-[150%] blur-[100px]"
+          className="absolute bottom-0 right-0 rounded-tl-full"
           style={{
-            background: `radial-gradient(circle, ${colors.secondary} 0%, transparent 70%)`,
-            opacity: 0.6
+            background: `radial-gradient(circle at bottom right, ${colors.gradient2} 0%, transparent 70%)`,
+            opacity: 1,
+            filter: 'blur(60px)',
+            transformOrigin: 'bottom right'
           }}
         />
         
         {/* Overlay blur for smooth blending */}
-        <div className="absolute inset-0 backdrop-blur-[20px] bg-black/10" />
+        <div className="absolute inset-0 backdrop-blur-[30px] bg-black/20" />
       </div>
 
       {/* Percentage Counter - Bottom Right Corner */}
@@ -145,12 +157,12 @@ const Preloader = () => {
         ref={percentageRef}
         className="absolute bottom-8 right-8 z-10"
         style={{
-          fontSize: '6rem',
+          fontSize: '5rem',
           fontWeight: 300,
-          color: 'rgba(255, 255, 255, 0.5)', // White with 50% opacity
+          color: 'rgba(255, 255, 255, 0.7)',
           fontFamily: "'Inter', sans-serif",
           letterSpacing: '-0.05em',
-          lineHeight: 1
+          textShadow: '0 2px 10px rgba(0,0,0,0.3)'
         }}
       >
         {percentage}%

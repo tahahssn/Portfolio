@@ -15,7 +15,7 @@ function App() {
     // Simulate loading assets
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 3500); // Match preloader duration
+    }, 4500); // Match preloader duration
 
     return () => clearTimeout(timer);
   }, []);

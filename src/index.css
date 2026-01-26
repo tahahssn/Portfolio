@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* * {
+  cursor: none !important;
+} */
+
 @font-face {
   font-family: "honer-those";
   src: url("/fonts/honer-those.otf") format("opentype");
@@ -29,26 +33,23 @@
   font-style: normal;
 }
 
-* {
-  cursor: none !important;
-}
 
 /* Re-enable for inputs and textareas */
-input, textarea, select, button {
+/* input, textarea, select, button {
   cursor: none !important;
-}
+} */
 
 /* Custom cursor classes */
-@keyframes ping {
+/* @keyframes ping {
   75%, 100% {
     transform: translate(-50%, -50%) scale(2);
     opacity: 0;
   }
-}
+} */
 
-.animate-ping {
+/* .animate-ping {
   animation: ping 0.5s cubic-bezier(0, 0, 0.2, 1);
-}
+} */
 
 /* 
 @font-face {

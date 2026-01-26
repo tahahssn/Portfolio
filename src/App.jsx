@@ -27,7 +27,7 @@ function App() {
       
       <div className={`min-h-screen ${isLoading ? 'overflow-hidden' : ''}`}>
         <Navbar />
-        <CustomCursor />
+        {/* <CustomCursor /> */}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />

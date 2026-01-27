@@ -188,9 +188,9 @@ const Preloader = () => {
       <div className="relative z-10 text-center px-4">
         <div 
           ref={nameRef}
-          className="text-3xl md:text-6xl text-white font-[GCGudlakDemo-SemiBold] mb-1 tracking-wider opacity-0"
+          className="text-3xl md:text-lg text-white font-[Dangerous] mb-1 tracking-wider opacity-0"
         >
-          Taha Hassan
+          Design and Coded By <b className="font-[Bestrong]">Taha Hassan</b>
         </div>
         
         <div 

@@ -28,48 +28,36 @@
 }
 
 @font-face {
-  font-family: "GCGudlakDemo-SemiBold";
+  font-family: "GCGudlakDemo";
   src: url("/fonts/GCGudlakDemo-SemiBold-BF695cd59bc5211.ttf") format("truetype");
   font-style: normal;
 }
 
 
-/* Re-enable for inputs and textareas */
-/* input, textarea, select, button {
-  cursor: none !important;
-} */
-
-/* Custom cursor classes */
-/* @keyframes ping {
-  75%, 100% {
-    transform: translate(-50%, -50%) scale(2);
-    opacity: 0;
-  }
-} */
-
-/* .animate-ping {
-  animation: ping 0.5s cubic-bezier(0, 0, 0.2, 1);
-} */
-
-/* 
 @font-face {
-  font-family: "honer-those";
-  src: url("/fonts/honer-those.otf") format("opentype");
+  font-family: "Bremer";
+  src: url("/fonts/Bremer.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "honer-those";
-  src: url("/fonts/honer-those.otf") format("opentype");
+  font-family: "Dangerous";
+  src: url("/fonts/Dangerous-BF694a9ca521b88.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "honer-those";
-  src: url("/fonts/honer-those.otf") format("opentype");
+  font-family: "MEIRO";
+  src: url("/fonts/MEIRO.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
-} */
+}
 
+@font-face {
+  font-family: "Newborn";
+  src: url("/fonts/Newborn-BF694aa0119bfca.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}

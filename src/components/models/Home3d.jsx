@@ -1,9 +1,16 @@
-import Spline from '@splinetool/react-spline';
+import React from 'react'
 
-export default function App() {
+const Home3d = () => {
   return (
-    <div className='absolute w-full h-full'>
-        <Spline scene="https://prod.spline.design/zlJjS75qM3XClnSj/scene.splinecode" />
+    <div style={{ width: '1080px', height: '1080px', position: 'relative' }}>
+      <Orb
+        hue={0}
+        hoverIntensity={0.5}
+        rotateOnHover
+        forceHoverState={false}
+      />
     </div>
-  );
+  )
 }
+
+export default Home3d

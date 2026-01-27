@@ -8,7 +8,7 @@ import {
 import { FaPatreon } from "react-icons/fa6";
 import { SiLeetcode } from "react-icons/si";
 
-const Navbar = () => {
+const Navbar = ({onBeforeNavigate}) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null); //FULL SCREEN MENU
   const menuBgRef = useRef(null); //FULL SCREEN MENU BG
@@ -196,7 +196,10 @@ const handleEmailMouseLeave = () => {
   // Handle link click with React Router
   const handleLinkClick = (path) => {
     setIsOpen(false);
-    
+    // Call this BEFORE starting page transition
+    if (onBeforeNavigate) {
+      onBeforeNavigate();
+    }
     // Close menu with animation, then navigate
     setTimeout(() => {
       navigate(path);
@@ -204,7 +207,7 @@ const handleEmailMouseLeave = () => {
   };
 
   const menuItems = [
-    { name: "Home", path: "/" },
+    { name: "Hero", path: "/" },
     { name: "About", path: "/about" },
     { name: "Skills", path: "/skills" },
     { name: "Projects/Hackathons", path: "/projects" },
@@ -213,27 +216,28 @@ const handleEmailMouseLeave = () => {
 
   return (
     <>
-      <nav className="absolute top-0 left-0 w-full z-50 px-6 py-6 flex items-center justify-between">
+      <nav className="absolute top-0 left-0 w-full z-50 px-6 py-2 flex items-center justify-between">
         {/* Logo as Link to Home */}
         <Link
           to="/"
           ref={logoRef}
           className="text-xl font-[honer-those] font-[100] tracking-wide text-white cursor-pointer"
         >
-          Taha Hassan
+            <img className="w-16 h-16 filter invert cursor-pointer hover:opacity-80 transition-opacity" src="/public/logo.png" alt="" />
         </Link>
 
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex flex-col gap-1.5 z-50"
+          className="flex flex-col gap-1.5 z-50 px-3"
         >
-          <span
-            className={`w-6 h-0.5 bg-[#b4c3d9] transition-transform duration-300 ${
+          {/* bg-[#b4c3d9] */}
+          <span 
+            className={`w-6 h-0.5 bg-white transition-transform duration-300 ${
               isOpen ? "rotate-45 translate-y-2" : ""
             }`}
           />
           <span
-            className={`w-6 h-0.5 bg-[#b4c3d9] transition-transform duration-300 ${
+            className={`w-6 h-0.5 bg-white transition-transform duration-300 ${
               isOpen ? "-rotate-45 -translate-y-1/2" : ""
             }`}
           />
@@ -317,7 +321,7 @@ const handleEmailMouseLeave = () => {
             className="inline-flex items-center cursor-pointer group"
           >
             <a 
-              href="mailto:taha@example.com" 
+              href="mailto:tahahassan699@gmail.com" 
               className="relative text-xl font-medium text-gray-400 group-hover:text-white transition-colors duration-400 mr-3"
             >
               tahahassan699@gmail.com

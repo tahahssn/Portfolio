@@ -1,13 +1,13 @@
 import { div } from 'framer-motion/client'
 import React from 'react'
+import Herobutton from '../home/Herobutton'
 
 const Paragraph = () => {
   return (
-    <div className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-10'>
-        <div className='leading-8 text-center'>
-            <h1 className='text-white font-[doner] text-5xl'>Hi! I am Taha Hassan</h1>
-            <h1 className='text-white font-[doner] text-2xl'>AI/ML Enthusiast & Frontend Developer</h1>
-        </div>
+    <div className='absolute bottom-6 right-10 z-20 w-80'>
+          <p className='text-white font-[doner] text-xs tracking-widest mb-1'>Software engineering student passionate about AI & Machine Learning, with frontend development experience, building impactful, data-driven, and well-designed solutions.</p>
+          <h1 className='text-white font-[Dangerous] text-sm tracking-widest mb-2'>Move people, not just screens.</h1>
+          <Herobutton/>
     </div>
   )
 }

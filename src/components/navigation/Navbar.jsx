@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { 
   FaGithub, FaLinkedin, FaInstagram, 
@@ -8,24 +7,23 @@ import {
 import { FaPatreon } from "react-icons/fa6";
 import { SiLeetcode } from "react-icons/si";
 
-const Navbar = ({onBeforeNavigate}) => {
+const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const menuRef = useRef(null); //FULL SCREEN MENU
-  const menuBgRef = useRef(null); //FULL SCREEN MENU BG
-  const itemsRef = useRef([]); //MENU ITEMS OR LINKS
-  const logoRef = useRef(null); //NAVBAR LOGO
-  const hoverBgRefs = useRef([]); //MENU LINKS BG HOVER
-  const emailRef = useRef(null); //EMAIL TEXT
-  const emailRollTextRef = useRef(null); //EMAIL ROLL TEXT
-  const socialRefs = useRef([]); //SOCIAL ICONS
-  const tl = useRef(null); //GSAP TIME LINE
-  const navigate = useNavigate(); //REACT ROUTING
+  const menuRef = useRef(null);
+  const menuBgRef = useRef(null);
+  const itemsRef = useRef([]);
+  const logoRef = useRef(null);
+  const hoverBgRefs = useRef([]);
+  const emailRef = useRef(null);
+  const emailRollTextRef = useRef(null);
+  const socialRefs = useRef([]);
+  const tl = useRef(null);
 
   // Social media data
   const socialLinks = [
     { icon: FaGithub, link: "https://github.com/tahahssn", color: "#fff" },
     { icon: FaLinkedin, link: "https://www.linkedin.com/in/syed-muhammad-taha-hassan-72aa22383/", color: "#0077b5" },
-    { icon: FaPatreon, link: "https://www.patreon.com/cw/TahaHassan", color: "#FF424D" },
+    { icon: FaPatreon, link: "https://www.patreon.com/cw/SyedTahaHassan", color: "#FF424D" },
     { icon: FaInstagram, link: "https://www.instagram.com/taha.hassan.35/", color: "#e4405f" },
     { icon: SiLeetcode, link: "https://leetcode.com", color: "#f89f1b" },
   ];
@@ -55,7 +53,7 @@ const Navbar = ({onBeforeNavigate}) => {
       "-=0.2"
     );
 
-    // 3. Menu items animate in - REMOVED NAME ANIMATION
+    // 3. Menu items animate in
     tl.current.fromTo(
       itemsRef.current,
       { y: 40, opacity: 0 },
@@ -148,25 +146,25 @@ const Navbar = ({onBeforeNavigate}) => {
   };
 
   // Handle email roll text effect
-const handleEmailMouseEnter = () => {
-  if (emailRollTextRef.current) {
-    gsap.to(emailRollTextRef.current.querySelector('.svg-icon'), {
-      rotation: 0,
-      duration: 0.5,
-      ease: "power2.out",
-    });
-  }
-};
+  const handleEmailMouseEnter = () => {
+    if (emailRollTextRef.current) {
+      gsap.to(emailRollTextRef.current.querySelector('.svg-icon'), {
+        rotation: 0,
+        duration: 0.5,
+        ease: "power2.out",
+      });
+    }
+  };
 
-const handleEmailMouseLeave = () => {
-  if (emailRollTextRef.current) {
-    gsap.to(emailRollTextRef.current.querySelector('.svg-icon'), {
-      rotation: -45,
-      duration: 0.5,
-      ease: "power2.out",
-    });
-  }
-};
+  const handleEmailMouseLeave = () => {
+    if (emailRollTextRef.current) {
+      gsap.to(emailRollTextRef.current.querySelector('.svg-icon'), {
+        rotation: -45,
+        duration: 0.5,
+        ease: "power2.out",
+      });
+    }
+  };
 
   // Handle social icon hover
   const handleSocialMouseEnter = (index) => {
@@ -193,43 +191,57 @@ const handleEmailMouseLeave = () => {
     }
   };
 
-  // Handle link click with React Router
-  const handleLinkClick = (path) => {
+  // Handle smooth scroll to sections
+  const handleLinkClick = (sectionId) => {
     setIsOpen(false);
-    // Call this BEFORE starting page transition
-    if (onBeforeNavigate) {
-      onBeforeNavigate();
-    }
-    // Close menu with animation, then navigate
+    
     setTimeout(() => {
-      navigate(path);
+      const element = document.getElementById(sectionId);
+      if (element) {
+        // Smooth scroll with offset for navbar
+        const yOffset = -80;
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        
+        window.scrollTo({
+          top: y,
+          behavior: 'smooth'
+        });
+      }
     }, 500);
   };
 
+  // Scroll to top when clicking logo
+  const handleLogoClick = (e) => {
+    e.preventDefault();
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   const menuItems = [
-    { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
-    { name: "Projects/Hackathons", path: "/projects" },
-    { name: "Contact", path: "/contact" },
+    { name: "Home", sectionId: "home" },
+    { name: "About", sectionId: "about" },
+    { name: "Projects/Hackathons", sectionId: "projects" },
+    { name: "Contact", sectionId: "contact" },
   ];
 
   return (
     <>
-      <nav className="absolute top-0 left-0 w-full z-50 px-6 py-2 flex items-center justify-between">
-        {/* LOGO AS LINK TO HOME*/}
-        <Link
-          to="/"
+      <nav className="fixed top-0 left-0 w-full z-50 px-6 py-2 flex items-center justify-between bg-transparent">
+        {/* Logo - scrolls to top */}
+        <button
+          onClick={handleLogoClick}
           ref={logoRef}
           className="text-xl font-[honer-those] font-[100] tracking-wide text-white cursor-pointer"
         >
-            <img className="w-16 h-16 filter invert cursor-pointer" src="/logo.png" alt="" />
-        </Link>
+          <img className="w-16 h-16 filter invert cursor-pointer" src="/logo.png" alt="Taha Hassan Logo" />
+        </button>
 
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="flex flex-col gap-1.5 z-50 px-3"
         >
-          {/* bg-[#b4c3d9] */}
           <span 
             className={`w-6 h-0.5 bg-white transition-transform duration-300 ${
               isOpen ? "rotate-45 translate-y-2" : ""
@@ -251,34 +263,34 @@ const handleEmailMouseLeave = () => {
         ref={menuRef}
         className="fixed inset-0 z-40 hidden items-center justify-center"
       >
-        {/* Main Navigation Links - FULL SCREEN WIDTH */}
+        {/* Main Navigation Links */}
         <ul className="text-center font-[doner] text-6xl font-bold tracking-wide text-[#b4c3d9] w-full">
           {menuItems.map((item, index) => (
             <li
-              key={item.path}
+              key={item.sectionId}
               ref={(el) => (itemsRef.current[index] = el)}
               className="relative border-b border-zinc-600 overflow-hidden w-full bottom-8"
               onMouseEnter={() => handleMouseEnter(index)}
               onMouseLeave={() => handleMouseLeave(index)}
             >
-              {/* Hover background that slides up from bottom */}
+              {/* Hover background */}
               <div
                 ref={(el) => (hoverBgRefs.current[index] = el)}
                 className="absolute bottom-0 left-0 w-full h-full bg-[#94bcf7] transform translate-y-full opacity-0 pointer-events-none"
                 style={{ zIndex: -1 }}
               />
 
-              {/* React Router Link */}
-              <Link
-                to={item.path}
+              {/* Anchor link for single page */}
+              <a
+                href={`#${item.sectionId}`}
                 onClick={(e) => {
                   e.preventDefault();
-                  handleLinkClick(item.path);
+                  handleLinkClick(item.sectionId);
                 }}
                 className="block w-full py-1.5 top-1 hover:text-black duration-300 cursor-pointer relative z-10"
               >
                 {item.name}
-              </Link>
+              </a>
             </li>
           ))}
         </ul>

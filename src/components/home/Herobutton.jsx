@@ -46,7 +46,7 @@ const Button = ({
 
   // For internal navigation, use React Router Link
   return (
-    <Link
+    <a
       to={to}
       onClick={handleClick}
       className={`group relative inline-block border-2 border-white bg-transparent px-2 py-2 text-center font-bold uppercase tracking-wider text-white transition-all duration-300 ease-in-out hover:bg-white ${className}`}
@@ -67,7 +67,7 @@ const Button = ({
       
       {/* Left line (before pseudo-element) */}
       <span className="absolute left-3 top-1/2 h-0.5 w-1.5 -translate-y-1/2 bg-white transition-all duration-300 ease-linear group-hover:w-2.5 group-hover:bg-black" />
-    </Link>
+    </a>
   );
 };
 

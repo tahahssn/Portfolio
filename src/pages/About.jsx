@@ -1,8 +1,11 @@
 import React from 'react'
+import { DrawCircleText } from '../components/about/DrawCircleText'
 
 const About = () => {
   return (
-    <div>About</div>
+    <div className="h-screen w-screen overflow-hidden">
+      <DrawCircleText/>
+    </div>
   )
 }
 

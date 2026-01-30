@@ -222,7 +222,7 @@ const handleEmailMouseLeave = () => {
           ref={logoRef}
           className="text-xl font-[honer-those] font-[100] tracking-wide text-white cursor-pointer"
         >
-            <img className="w-16 h-16 filter invert cursor-pointer hover:opacity-80 transition-opacity" src="/logo.png" alt="" />
+            <img className="w-16 h-16 filter invert cursor-pointer" src="/logo.png" alt="" />
         </Link>
 
         <button

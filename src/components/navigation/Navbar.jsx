@@ -207,9 +207,8 @@ const handleEmailMouseLeave = () => {
   };
 
   const menuItems = [
-    { name: "Hero", path: "/" },
+    { name: "Home", path: "/" },
     { name: "About", path: "/about" },
-    { name: "Skills", path: "/skills" },
     { name: "Projects/Hackathons", path: "/projects" },
     { name: "Contact", path: "/contact" },
   ];
@@ -217,13 +216,13 @@ const handleEmailMouseLeave = () => {
   return (
     <>
       <nav className="absolute top-0 left-0 w-full z-50 px-6 py-2 flex items-center justify-between">
-        {/* Logo as Link to Home */}
+        {/* LOGO AS LINK TO HOME*/}
         <Link
           to="/"
           ref={logoRef}
           className="text-xl font-[honer-those] font-[100] tracking-wide text-white cursor-pointer"
         >
-            <img className="w-16 h-16 filter invert cursor-pointer hover:opacity-80 transition-opacity" src="/public/logo.png" alt="" />
+            <img className="w-16 h-16 filter invert cursor-pointer hover:opacity-80 transition-opacity" src="/logo.png" alt="" />
         </Link>
 
         <button
@@ -253,7 +252,7 @@ const handleEmailMouseLeave = () => {
         className="fixed inset-0 z-40 hidden items-center justify-center"
       >
         {/* Main Navigation Links - FULL SCREEN WIDTH */}
-        <ul className="text-center font-[doner] text-5xl font-bold tracking-wide text-[#b4c3d9] w-full">
+        <ul className="text-center font-[doner] text-6xl font-bold tracking-wide text-[#b4c3d9] w-full">
           {menuItems.map((item, index) => (
             <li
               key={item.path}

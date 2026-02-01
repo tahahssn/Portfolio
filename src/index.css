@@ -2,9 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* * {
-  cursor: none !important;
-} */
+* {
+  /* cursor: none !important; */
+}
 
 @font-face {
   font-family: "honer-those";

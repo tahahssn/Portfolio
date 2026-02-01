@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 const Button = ({ 
   text = "Let's Collaborate", 
@@ -17,7 +16,7 @@ const Button = ({
   };
 
   // If it's an external link or no "to" prop, use regular <a> tag
-  if (isExternal || to.startsWith("http") || to === "#") {
+  if (isExternal || to.startsWith("http") || to === "mailto:tahahassan699@gmail.com") {
     return (
       <a
         href={to}

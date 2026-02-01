@@ -8,10 +8,10 @@ export const projects = [
     link: "https://derivium-coral.vercel.app/"
   },
   {
-    name: "Decimal",
-    client: "Decimal",
+    name: "Game Night [CoD:MW4]",
+    client: "Personal Project",
     description: "Portfolio site for Decimal.",
-    src: "decimal.jpg",
+    src: "derivium.png",
     year: 2023,
   },
 ];

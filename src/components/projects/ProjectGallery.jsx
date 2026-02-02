@@ -25,7 +25,7 @@ function ProjectGallery() {
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: headingRef.current,
-        start: "top 40%",
+        start: "top 50%",
         end: "top 30%",
         scrub: false,
         toggleActions: "play none reverse none" // This adds reverse on scroll up

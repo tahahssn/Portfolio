@@ -9,6 +9,7 @@ const Footer = () => {
   const hoverBgRefs = useRef([]);
   const footerRef = useRef(null);
   const copyrightRef = useRef(null);
+  const craftedRef = useRef(null);
 
   // Contact links in menu style
   const contactLinks = [
@@ -78,7 +79,7 @@ const Footer = () => {
           y: 0,
           opacity: 1,
           stagger: 0.15,
-          duration: 0.6,
+          duration: 0.8,
           ease: "power1.out",
           scrollTrigger: {
             trigger: footerRef.current,
@@ -100,13 +101,34 @@ const Footer = () => {
           y: 0,
           opacity: 1,
           duration: 0.8,
-          stagger: "0.20",
-          delay: 0.6,          
+          delay: 0.6,
           ease: "power1.out",
           scrollTrigger: {
             trigger: footerRef.current,
-            start: "top top",
-            end: "top 30%",
+            start: "top 30%",
+            end: "top 10%",
+            toggleActions: "play none none reverse",
+          }
+        }
+      );
+
+      // Animate crafted text separately
+      gsap.fromTo(
+        craftedRef.current,
+        { 
+          y: 30, 
+          opacity: 0 
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.6,
+          delay: 0.5,
+          ease: "power1.out",
+          scrollTrigger: {
+            trigger: footerRef.current,
+            start: "top 30%",
+            end: "top 10%",
             toggleActions: "play none none reverse",
           }
         }
@@ -161,14 +183,17 @@ const Footer = () => {
         </div>
 
         {/* Copyright Section */}
-        <div 
-          ref={copyrightRef}
-          className="text-center"
-        >
-          <p className="text-gray-400 text-sm font-light tracking-wider mb-2 font-[doner]">
+        <div className="text-center">
+          <p 
+            ref={copyrightRef}
+            className="text-gray-400 text-sm font-light tracking-wider mb-2 font-[doner]"
+          >
             © {new Date().getFullYear()} Taha Hassan. All rights reserved.
           </p>
-          <p className="text-gray-400 text-xs font-light font-[doner]">
+          <p 
+            ref={craftedRef}
+            className="text-gray-400 text-xs font-light font-[doner]"
+          >
             Crafted with passion and precision
           </p>
         </div>

@@ -222,7 +222,7 @@ const Navbar = () => {
   const menuItems = [
     { name: "Home", sectionId: "home" },
     { name: "About", sectionId: "about" },
-    { name: "Projects/Hackathons", sectionId: "projects" },
+    { name: "Projects", sectionId: "projects" },
     { name: "Contact", sectionId: "contact" },
   ];
 

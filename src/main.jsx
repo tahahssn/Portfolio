@@ -6,8 +6,8 @@ import SmoothScrolling from './components/common/SmoothScrolling.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <SmoothScrolling>
+    {/* <SmoothScrolling> */}
       <App />
-    </SmoothScrolling>
+    {/* </SmoothScrolling> */}
   </StrictMode>,
 )

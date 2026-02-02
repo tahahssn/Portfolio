@@ -76,7 +76,7 @@ function ProjectGallery() {
     <main className="mt-[5vh] text-white pb-[10vh] bg-black min-h-screen">
       <h1 
         ref={headingRef} 
-        className="pt-16 flex items-center justify-center text-8xl font-[doner] overflow-hidden"
+        className="pt-16 flex items-center justify-center font-[doner] text-7xl tracking-wide font-bold text-[#dbe1ec] overflow-hidden"
       >
         {splitText(headingText)}
       </h1>

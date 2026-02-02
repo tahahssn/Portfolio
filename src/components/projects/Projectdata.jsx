@@ -2,7 +2,7 @@ export const projects = [
   {
     name: "Derivium",
     client: "UBIT",
-    description: "From Limits to 3D Graphs - Solve, Explore, Visualize",
+    description: "From Limits to 3D Graphs - Solve, Explore, Visualize.",
     src: "derivium.png",
     year: 2025,
     link: "https://derivium-coral.vercel.app/"
@@ -10,8 +10,41 @@ export const projects = [
   {
     name: "Game Night [CoD:MW4]",
     client: "Personal Project",
-    description: "Portfolio site for Decimal.",
-    src: "derivium.png",
-    year: 2023,
+    description: "Counter Strike 1.6 Call of Duty Mordern Warefare 4 moded server",
+    src: "gamenight.png",
+    year: 2025,
+    link: "https://discord.gg/RPmARKDc6f"
   },
-];
+  {
+    name: "Significo",
+    client: "Significo",
+    description: "Significo is a well-known website, and I have redesigned it",
+    src: "significo.png",
+    year: 2024,
+    link: "https://github.com/tahahssn/Advanced-Frontend-Projects"
+  },
+  // {
+  //   name: "Pinterest",
+  //   client: "Pinterest",
+  //   description: "Pinterest is an incredibly well-known site, and I've made it's clone.",
+  //   src: "pinterest.png",
+  //   year: 2024,
+  //   link: "https://github.com/tahahssn/Intermediate-Frontend-Projects/tree/main/pinterest"
+  // },
+  // {
+  //   name: "Bent Lindberg ",
+  //   client: "Bent Lindberg ",
+  //   description: "Bent Lindberg is a well-known designer. I clone his portfolio.",
+  //   src: "bentlindberg.png",
+  //   year: 2024,
+  //   link: "https://derivium-coral.vercel.app/"
+  // },
+  {
+    name: "Tinder Web",
+    client: "Personal Project",
+    description: "Tinder Web is basically a frontend project inspired from tinder.",
+    src: "TinderWeb.png",
+    year: 2024,
+    link: "https://github.com/tahahssn/Tinder-Web"
+  },
+  ];

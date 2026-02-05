@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import Navbar from "./components/navigation/Navbar";
 import Footer from "./components/common/Footer";
 import Preloader from "./components/common/Preloader";
-import CustomCursor from "./components/common/CustomCursor";
 import Hero from "./pages/Hero";
 import About from "./pages/About";
 import Skills from "./pages/Skills";

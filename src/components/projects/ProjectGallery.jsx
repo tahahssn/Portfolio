@@ -56,7 +56,7 @@ function ProjectGallery() {
   }, []);
 
   // Split heading text into individual characters with spans
-  const headingText = "Projects";
+  const headingText = "Projects Showcase";
   
   const splitText = (text) => {
     return text.split('').map((char, index) => (

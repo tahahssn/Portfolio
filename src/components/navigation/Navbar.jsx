@@ -25,7 +25,6 @@ const Navbar = () => {
     { icon: FaLinkedin, link: "https://www.linkedin.com/in/syed-muhammad-taha-hassan-72aa22383/", color: "#0077b5" },
     { icon: FaPatreon, link: "https://www.patreon.com/cw/SyedTahaHassan", color: "#FF424D" },
     { icon: FaInstagram, link: "https://www.instagram.com/taha.hassan.35/", color: "#e4405f" },
-    { icon: SiLeetcode, link: "https://leetcode.com", color: "#f89f1b" },
   ];
 
   useEffect(() => {

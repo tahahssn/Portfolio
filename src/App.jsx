@@ -4,7 +4,6 @@ import Footer from "./components/common/Footer";
 import Preloader from "./components/common/Preloader";
 import Hero from "./pages/Hero";
 import About from "./pages/About";
-import Skills from "./pages/Skills";
 import Projects from "./pages/Projects";
 
 function App() {
@@ -32,10 +31,6 @@ function App() {
           
           <section id="about" className="min-h-screen overflow-hidden">
             <About />
-          </section>
-          
-          <section id="skills" className="min-h-screen overflow-hidden">
-            <Skills />
           </section>
           
           <section id="projects" className="min-h-screen overflow-hidden">

@@ -73,7 +73,7 @@ function ProjectGallery() {
   };
 
   return (
-    <main className="mt-[5vh] text-white pb-[10vh] bg-black min-h-screen">
+    <main className="text-white pb-[10vh] bg-black min-h-screen">
       <h1 
         ref={headingRef} 
         className="pt-16 flex items-center justify-center font-[doner] text-7xl tracking-wide font-bold text-[#dbe1ec] overflow-hidden"

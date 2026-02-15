@@ -190,7 +190,7 @@ const Preloader = () => {
           ref={nameRef}
           className="text-3xl md:text-lg text-white font-[Dangerous] mb-1 tracking-wider opacity-0"
         >
-          Design and Coded By <b className="font-[Bestrong]">Taha Hassan</b>
+          Design and Coded By Taha Hassan
         </div>
         
         <div 

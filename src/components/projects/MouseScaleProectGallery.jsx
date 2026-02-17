@@ -78,7 +78,7 @@ export default function MouseScaleProectGallery({ projects, reversed = false }) 
         <div className="p-[10px] text-base">
           <h3 className="text-[1.2em] mb-1 mt-0 font-normal">{projects[0].name}</h3>
           <p className="text-[1em] m-0 text-gray-400">{projects[0].description}</p>
-          <p className="text-[1em] m-0 text-gray-500">{projects[0].year}</p>
+          <p className="text-[1em] m-0 text-gray-300">{projects[0].year}</p>
         </div>
       </div>
 
@@ -101,7 +101,7 @@ export default function MouseScaleProectGallery({ projects, reversed = false }) 
         <div className="p-[10px] text-base">
           <h3 className="text-[1.2em] mb-1 mt-0 font-normal">{projects[1].name}</h3>
           <p className="text-[1em] m-0 text-gray-400">{projects[1].description}</p>
-          <p className="text-[1em] m-0 text-gray-500">{projects[1].year}</p>
+          <p className="text-[1em] m-0 text-gray-300">{projects[1].year}</p>
         </div>
       </div>
     </div>

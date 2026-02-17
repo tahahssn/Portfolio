@@ -1,11 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import gsap from "gsap";
-import { 
-  FaGithub, FaLinkedin, FaInstagram, 
-  FaDiscord
-} from "react-icons/fa";
-import { FaPatreon } from "react-icons/fa6";
-import { SiLeetcode } from "react-icons/si";
+import { FaGithub } from 'react-icons/fa6';
+import { FaLinkedin } from 'react-icons/fa6';
+import { FaInstagram } from 'react-icons/fa6';
+import { FaPatreon } from 'react-icons/fa6';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -233,13 +231,15 @@ const Navbar = () => {
           onClick={handleLogoClick}
           ref={logoRef}
           className="text-xl font-[honer-those] font-[100] tracking-wide text-white cursor-pointer"
+          aria-label="Scroll to top"
         >
-          <img className="w-16 h-16 filter invert cursor-pointer" src="/logo.png" alt="Taha Hassan Logo" />
+          <img className="w-16 h-16 filter invert cursor-pointer" src="/logo.webp" alt="Taha Hassan Logo" />
         </button>
 
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="flex flex-col gap-1.5 z-50 px-3"
+          aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"} 
         >
           <span 
             className={`w-6 h-0.5 bg-white transition-transform duration-300 ${

@@ -8,14 +8,44 @@ import Projects from "./pages/Projects";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const [loadProgress, setLoadProgress] = useState(0);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-      document.body.style.overflow = 'auto';
-    }, 4500);
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += Math.random() * 15; // Increment by random amount for natural feel
+      if (progress >= 100) {
+        progress = 100;
+        clearInterval(interval);
+        
+        // Small delay at 100% for visual satisfaction
+        setTimeout(() => {
+          setIsLoading(false);
+          document.body.style.overflow = 'auto';
+        }, 800);
+      }
+      setLoadProgress(Math.min(progress, 100));
+    }, 200);
 
-    return () => clearTimeout(timer);
+    // Track actual resource loading
+    const resources = [];
+    const observer = new PerformanceObserver((list) => {
+      list.getEntries().forEach((entry) => {
+        if (entry.entryType === 'resource') {
+          resources.push(entry);
+          // You can use this to make progress more accurate
+          console.log(`Loaded: ${entry.name}`);
+        }
+      });
+    });
+    
+    observer.observe({ entryTypes: ['resource'] });
+
+    // Clean up
+    return () => {
+      clearInterval(interval);
+      observer.disconnect();
+    };
   }, []);
 
   return (

@@ -167,6 +167,7 @@ const Preloader = () => {
           ref={gradient1Ref}
           className="absolute top-0 left-0 rounded-br-full blur-[60px]"
           style={{
+            width: '200px', height: '200px',
             background: 'radial-gradient(circle at top left, #94bcf7 0%, transparent 70%)'
           }}
         />

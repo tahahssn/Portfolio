@@ -5,7 +5,8 @@ const Button = ({
   to = "mailto:tahahassan699@gmail.com",
   onClick,
   className = "",
-  isExternal = false // For external links
+  isExternal = false, // For external links
+  ariaLabel
 }) => {
   
   const handleClick = (e) => {
@@ -21,6 +22,7 @@ const Button = ({
       <a
         href={to}
         onClick={handleClick}
+        aria-label={ariaLabel || text}
         className={`group relative inline-block border-2 border-white bg-transparent px-2 py-2 text-center font-bold uppercase tracking-wider text-white transition-all duration-300 ease-in-out hover:bg-white ${className}`}
       >
         {/* Top key */}
@@ -48,6 +50,7 @@ const Button = ({
     <a
       to={to}
       onClick={handleClick}
+      aria-label={ariaLabel || text}
       className={`group relative inline-block border-2 border-white bg-transparent px-2 py-2 text-center font-bold uppercase tracking-wider text-white transition-all duration-300 ease-in-out hover:bg-white ${className}`}
     >
       {/* Top key */}

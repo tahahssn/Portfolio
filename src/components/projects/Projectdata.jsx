@@ -3,7 +3,7 @@ export const projects = [
     name: "Derivium",
     client: "UBIT",
     description: "From Limits to 3D Graphs - Solve, Explore, Visualize.",
-    src: "derivium.png",
+    src: "derivium.webp",
     year: 2025,
     link: "https://derivium-coral.vercel.app/"
   },
@@ -11,7 +11,7 @@ export const projects = [
     name: "Game Night [CoD:MW4]",
     client: "Personal Project",
     description: "Counter Strike 1.6 Call of Duty Mordern Warefare 4 moded server",
-    src: "gamenight.png",
+    src: "gamenight.webp",
     year: 2025,
     link: "https://discord.gg/RPmARKDc6f"
   },
@@ -19,7 +19,7 @@ export const projects = [
     name: "Significo",
     client: "Significo",
     description: "Significo is a well-known website, and I have redesigned it",
-    src: "significo.png",
+    src: "significo.webp",
     year: 2024,
     link: "https://github.com/tahahssn/Advanced-Frontend-Projects"
   },
@@ -43,7 +43,7 @@ export const projects = [
     name: "Tinder Web",
     client: "Personal Project",
     description: "Tinder Web is basically a frontend project inspired from tinder.",
-    src: "TinderWeb.png",
+    src: "TinderWeb.webp",
     year: 2024,
     link: "https://github.com/tahahssn/Tinder-Web"
   },

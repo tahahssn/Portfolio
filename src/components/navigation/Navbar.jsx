@@ -225,7 +225,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 w-full z-50 px-6 py-2 flex items-center justify-between bg-transparent">
+      <nav className="fixed top-0 left-0 w-full z-50 px-4 sm:px-6 py-2 flex items-center justify-between bg-transparent">
         {/* Logo - scrolls to top */}
         <button
           onClick={handleLogoClick}
@@ -233,7 +233,7 @@ const Navbar = () => {
           className="text-xl font-[honer-those] font-[100] tracking-wide text-white cursor-pointer"
           aria-label="Scroll to top"
         >
-          <img className="w-16 h-16 filter invert cursor-pointer" src="/logo.webp" alt="Taha Hassan Logo" />
+          <img className="w-12 h-12 sm:w-16 sm:h-16 filter invert cursor-pointer" src="/logo.webp" alt="Taha Hassan Logo" />
         </button>
 
         <button
@@ -242,12 +242,12 @@ const Navbar = () => {
           aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"} 
         >
           <span 
-            className={`w-6 h-0.5 bg-white transition-transform duration-300 ${
+            className={`w-5 sm:w-6 h-0.5 bg-white transition-transform duration-300 ${
               isOpen ? "rotate-45 translate-y-2" : ""
             }`}
           />
           <span
-            className={`w-6 h-0.5 bg-white transition-transform duration-300 ${
+            className={`w-5 sm:w-6 h-0.5 bg-white transition-transform duration-300 ${
               isOpen ? "-rotate-45 -translate-y-1/2" : ""
             }`}
           />
@@ -263,7 +263,7 @@ const Navbar = () => {
         className="fixed inset-0 z-40 hidden items-center justify-center"
       >
         {/* Main Navigation Links */}
-        <ul className="text-center font-[doner] text-6xl font-bold tracking-wide text-[#b4c3d9] w-full">
+        <ul className="text-center font-[doner] text-4xl sm:text-5xl md:text-6xl font-bold tracking-wide text-[#b4c3d9] w-full">
           {menuItems.map((item, index) => (
             <li
               key={item.sectionId}
@@ -286,7 +286,7 @@ const Navbar = () => {
                   e.preventDefault();
                   handleLinkClick(item.sectionId);
                 }}
-                className="block w-full py-1.5 top-1 hover:text-black duration-300 cursor-pointer relative z-10"
+                className="block w-full py-1.5 top-1 hover:text-black duration-300 cursor-pointer relative z-10 text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
               >
                 {item.name}
               </a>
@@ -295,8 +295,8 @@ const Navbar = () => {
         </ul>
 
         {/* Social Links - Bottom Left */}
-        <div className="absolute bottom-8 left-8">
-          <div className="flex items-center space-x-4">
+        <div className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-4 sm:left-6 md:left-8">
+          <div className="flex items-center space-x-3 sm:space-x-4">
             {socialLinks.map((social, index) => {
               const Icon = social.icon;
               return (
@@ -306,7 +306,7 @@ const Navbar = () => {
                   href={social.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-2xl text-white hover:opacity-100 opacity-80 transition-all duration-300"
+                  className="text-xl sm:text-2xl text-white hover:opacity-100 opacity-80 transition-all duration-300"
                   style={{ color: social.color }}
                   onMouseEnter={() => handleSocialMouseEnter(index)}
                   onMouseLeave={() => handleSocialMouseLeave(index)}
@@ -321,18 +321,18 @@ const Navbar = () => {
         {/* Email - Bottom Right */}
         <div 
           ref={emailRef}
-          className="absolute bottom-8 right-8 text-right"
+          className="absolute bottom-4 sm:bottom-6 md:bottom-8 right-4 sm:right-6 md:right-8 text-right max-w-[calc(100%-2rem)] sm:max-w-none"
         >
-          <div className="mb-2 text-sm text-gray-400">GET IN TOUCH</div>
+          <div className="mb-1 sm:mb-2 text-xs sm:text-sm text-gray-400">GET IN TOUCH</div>
           <div
             ref={emailRollTextRef}
             onMouseEnter={handleEmailMouseEnter}
             onMouseLeave={handleEmailMouseLeave}
-            className="inline-flex items-center cursor-pointer group"
+            className="inline-flex items-center cursor-pointer group flex-wrap sm:flex-nowrap justify-end"
           >
             <a 
               href="mailto:tahahassan699@gmail.com" 
-              className="relative text-xl font-medium text-gray-400 group-hover:text-white transition-colors duration-400 mr-3"
+              className="relative text-sm sm:text-base md:text-xl font-medium text-gray-400 group-hover:text-white transition-colors duration-400 mr-2 sm:mr-3 break-all sm:break-normal"
             >
               tahahassan699@gmail.com
               <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white group-hover:w-full transition-all duration-500 ease-[cubic-bezier(0.25,0.8,0.25,1)]"></span>
@@ -340,7 +340,7 @@ const Navbar = () => {
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
               viewBox="0 0 448 512" 
-              className="svg-icon w-5 h-5 fill-gray-400 group-hover:fill-white transition-all duration-500"
+              className="svg-icon w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 fill-gray-400 group-hover:fill-white transition-all duration-500 flex-shrink-0"
               style={{ transform: 'rotate(-45deg)' }}
             >
               <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />

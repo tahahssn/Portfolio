@@ -149,7 +149,7 @@ const Footer = () => {
       <div className="relative z-10 w-full mx-auto">
         {/* Contact Links - Main section */}
         <div className="mb-9">
-          <ul className="text-center font-[doner] text-4xl md:text-5xl font-bold tracking-wide text-[#b4c3d9]">
+          <ul className="text-center font-[doner] text-4xl md:text-5xl font-bold tracking-wide text-[#b4c3d9] max-md:text-4xl max-md:tracking-normal max-sm:text-xl max-sm:tracking-tight">
             {contactLinks.map((item, index) => (
               <li
                 key={index}

@@ -189,14 +189,14 @@ const Preloader = () => {
       <div className="relative z-10 text-center px-4">
         <div 
           ref={nameRef}
-          className="text-3xl md:text-lg text-white font-[Dangerous] mb-1 tracking-wider opacity-0"
+          className="text-3xl md:text-lg text-white font-[Dangerous] mb-1 tracking-wider opacity-0 max-md:text-base max-sm:text-sm"
         >
           Design and Coded By Taha Hassan
         </div>
         
         <div 
           ref={titleRef}
-          className="text-1xl text-gray-300 font-[doner] tracking-wider opacity-0"
+          className="text-1xl text-gray-300 font-[doner] tracking-wider opacity-0 max-md:text-lg max-sm:text-sm"
         >
           AI/ML Enthusiast | Frontend Developer
         </div>
@@ -205,7 +205,7 @@ const Preloader = () => {
       {/* Percentage counter */}
       <div 
         ref={percentageRef}
-        className="absolute bottom-0 right-8 z-10 text-[5.5rem] font-thin text-white/70 font-[honer-those]"
+        className="absolute bottom-0 right-8 z-10 text-[5.5rem] font-thin text-white/70 font-[honer-those] max-md:text-[4rem] max-md:right-6 max-sm:text-[3rem] max-sm:right-4"
       >
         {percentage}%
       </div>

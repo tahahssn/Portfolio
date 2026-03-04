@@ -21,7 +21,7 @@ export const projects = [
     description: "Significo is a well-known website, and I have redesigned it",
     src: "significo.webp",
     year: 2024,
-    link: "https://github.com/tahahssn/Advanced-Frontend-Projects"
+    link: "https://significo-clone.s3.eu-north-1.amazonaws.com/index.html"
   },
   // {
   //   name: "Pinterest",

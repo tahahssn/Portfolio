@@ -5,6 +5,7 @@ import Preloader from "./components/common/Preloader";
 import Hero from "./pages/Hero";
 import About from "./pages/About";
 import Projects from "./pages/Projects";
+import Marquee from "./pages/Marquee";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -62,6 +63,7 @@ function App() {
           {/* <section id="about" className="min-h-screen overflow-hidden">
             <About />
           </section> */}
+          <Marquee/>
           
           <section id="projects" className="min-h-screen overflow-hidden">
             <Projects />

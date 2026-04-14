@@ -11,6 +11,7 @@ const Navbar = () => {
   const menuBgRef = useRef(null);
   const itemsRef = useRef([]);
   const logoRef = useRef(null);
+  const resumeBtnRef = useRef(null);
   const hoverBgRefs = useRef([]);
   const emailRef = useRef(null);
   const emailRollTextRef = useRef(null);
@@ -94,6 +95,17 @@ const Navbar = () => {
     // 6. Logo fades out
     tl.current.to(
       logoRef.current,
+      {
+        opacity: 0,
+        pointerEvents: "none",
+        duration: 0.3,
+      },
+      0
+    );
+
+    // 7. Resume button fades out when menu opens
+    tl.current.to(
+      resumeBtnRef.current,
       {
         opacity: 0,
         pointerEvents: "none",
@@ -195,7 +207,6 @@ const Navbar = () => {
     setTimeout(() => {
       const element = document.getElementById(sectionId);
       if (element) {
-        // Smooth scroll with offset for navbar
         const yOffset = -80;
         const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
         
@@ -216,6 +227,17 @@ const Navbar = () => {
     });
   };
 
+  // Handle resume download
+  const handleResumeDownload = () => {
+    const resumeUrl = "./public/taha's_resume.pdf";
+    const link = document.createElement('a');
+    link.href = resumeUrl;
+    link.download = "taha's_resume.pdf";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const menuItems = [
     { name: "Home", sectionId: "home" },
     { name: "Projects", sectionId: "projects" },
@@ -224,7 +246,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 w-full z-50 px-4 sm:px-6 py-2 flex items-center justify-between bg-transparent">
+      <nav className="absolute top-0 left-0 w-full z-50 px-4 sm:px-6 py-2 flex items-center justify-between bg-transparent">
         {/* Logo - scrolls to top */}
         <button
           onClick={handleLogoClick}
@@ -235,22 +257,52 @@ const Navbar = () => {
           <img className="w-12 h-12 sm:w-16 sm:h-16 filter invert cursor-pointer" src="/logo.webp" alt="Taha Hassan Logo" />
         </button>
 
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="flex flex-col gap-1.5 z-50 px-3"
-          aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"} 
-        >
-          <span 
-            className={`w-5 sm:w-6 h-0.5 bg-white transition-transform duration-300 ${
-              isOpen ? "rotate-45 translate-y-2" : ""
-            }`}
-          />
-          <span
-            className={`w-5 sm:w-6 h-0.5 bg-white transition-transform duration-300 ${
-              isOpen ? "-rotate-45 -translate-y-1/2" : ""
-            }`}
-          />
-        </button>
+        {/* Right side: Resume Button + Hamburger */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          {/* Resume Button - Integrated directly */}
+          <div ref={resumeBtnRef}>
+            <button
+              onClick={handleResumeDownload}
+              className="group relative inline-block border-2 border-white bg-transparent px-1.5 py-1.5 sm:px-2 sm:py-2 text-center font-bold uppercase tracking-wider text-white transition-all duration-300 ease-in-out hover:bg-white"
+              aria-label="Download Resume"
+            >
+              {/* Top key */}
+              <span className="absolute left-1.5 sm:left-2.5 top-[-2px] h-0.5 w-4 sm:w-6 bg-[#212121] transition-all duration-500 ease-out group-hover:left-[-2px] group-hover:w-0" />
+              
+              {/* Button text */}
+              <span className="relative block pl-2 sm:pl-4 text-[10px] sm:text-xs leading-normal transition-all duration-300 ease-in-out group-hover:pl-3 sm:group-hover:pl-6 group-hover:text-black">
+                RESUME
+              </span>
+              
+              {/* Bottom key 1 */}
+              <span className="absolute bottom-[-2px] right-4 sm:right-7 h-0.5 w-4 sm:w-6 bg-[#212121] transition-all duration-500 ease-out group-hover:right-0 group-hover:w-0" />
+              
+              {/* Bottom key 2 */}
+              <span className="absolute bottom-[-2px] right-1.5 sm:right-2.5 h-0.5 w-1.5 sm:w-2.5 bg-[#212121] transition-all duration-500 ease-out group-hover:right-0 group-hover:w-0" />
+              
+              {/* Left line */}
+              <span className="absolute left-2 sm:left-3 top-1/2 h-0.5 w-1 sm:w-1.5 -translate-y-1/2 bg-white transition-all duration-300 ease-linear group-hover:w-2 sm:group-hover:w-3.5 group-hover:bg-black" />
+            </button>
+          </div>
+
+          {/* Hamburger Button */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="flex flex-col gap-1.5 z-50 px-3"
+            aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"} 
+          >
+            <span 
+              className={`w-5 sm:w-6 h-0.5 bg-white transition-transform duration-300 ${
+                isOpen ? "rotate-45 translate-y-2" : ""
+              }`}
+            />
+            <span
+              className={`w-5 sm:w-6 h-0.5 bg-white transition-transform duration-300 ${
+                isOpen ? "-rotate-45 -translate-y-1/2" : ""
+              }`}
+            />
+          </button>
+        </div>
       </nav>
 
       {/* Background that slides from top */}

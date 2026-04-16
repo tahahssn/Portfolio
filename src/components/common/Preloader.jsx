@@ -158,7 +158,7 @@ const Preloader = () => {
   return (
     <div 
       ref={preloaderRef}
-      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-black"
+      className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-[#0a1326]"
     >
       {/* Background gradients */}
       <div className="absolute inset-0 overflow-hidden">
@@ -168,7 +168,7 @@ const Preloader = () => {
           className="absolute top-0 left-0 rounded-br-full blur-[60px]"
           style={{
             width: '200px', height: '200px',
-            background: 'radial-gradient(circle at top left, #94bcf7 0%, transparent 70%)'
+            background: 'radial-gradient(circle at top left, #9c4c80 0%, transparent 70%)'
           }}
         />
         
@@ -177,12 +177,12 @@ const Preloader = () => {
           ref={gradient2Ref}
           className="absolute bottom-0 right-0 rounded-tl-full blur-[60px]"
           style={{
-            background: 'radial-gradient(circle at bottom right, #b4c3d9 0%, transparent 70%)'
+            background: 'radial-gradient(circle at bottom right, #97c7c1 0%, transparent 70%)'
           }}
         />
         
         {/* Blur overlay */}
-        <div className="absolute inset-0 backdrop-blur-[30px] bg-black/20" />
+        <div className="absolute inset-0 backdrop-blur-[30px] bg-[#0a1326]/20" />
       </div>
 
       {/* Center text */}

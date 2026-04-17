@@ -5,6 +5,7 @@ import Preloader from "./components/common/Preloader";
 import Hero from "./pages/Hero";
 import About from "./pages/About";
 import Projects from "./pages/Projects";
+import Ticker from "./components/common/Ticker";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -59,10 +60,11 @@ function App() {
             <Hero />
           </section>
           
-          {/* <section id="about" className="min-h-screen overflow-hidden">
+          <section id="about" className="min-h-screen overflow-hidden">
             <About />
-          </section> */}
+          </section>
           
+          <Ticker />
           <section id="projects" className="min-h-screen overflow-hidden">
             <Projects />
           </section>

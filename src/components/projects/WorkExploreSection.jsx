@@ -444,7 +444,7 @@ function WorkHero() {
             commitment to creativity and excellence.
           </p>
           <div className="rv d2">
-            <ExploreBtn href="#explore" />
+            <ExploreBtn href="https://github.com/tahahssn" />
           </div>
         </div>
       </div>

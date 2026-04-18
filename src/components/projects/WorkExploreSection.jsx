@@ -95,6 +95,49 @@ const GlobalStyles = () => (
       color: var(--black);
       line-height: 1;
     }
+
+    /* ── Responsive adjustments ──────────────────────────────────── */
+    @media (max-width: 768px) {
+      .explore-btn {
+        padding: 8px 20px 8px 8px;
+        gap: 8px;
+      }
+      .btn-circle {
+        width: 32px;
+        height: 32px;
+      }
+      .btn-arrow-slot {
+        width: 32px;
+        height: 32px;
+      }
+      .explore-btn:hover .btn-arrow-track {
+        transform: translateY(-32px);
+      }
+      .btn-label {
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .explore-btn {
+        padding: 6px 16px 6px 6px;
+        gap: 6px;
+      }
+      .btn-circle {
+        width: 28px;
+        height: 28px;
+      }
+      .btn-arrow-slot {
+        width: 28px;
+        height: 28px;
+      }
+      .explore-btn:hover .btn-arrow-track {
+        transform: translateY(-28px);
+      }
+      .btn-label {
+        font-size: 12px;
+      }
+    }
   `}</style>
 )
 
@@ -303,9 +346,9 @@ function WorkItem({ project, index }) {
         bottom: 'clamp(32px,5vh,60px)',
         left:   'clamp(24px,5vw,64px)',
         fontFamily: 'var(--disp)',
-        fontSize:   'clamp(52px,8vw,120px)',
+        fontSize:   'clamp(40px,8vw,120px)',
         color: 'var(--white)', lineHeight: .9,
-        letterSpacing: '.01em', maxWidth: '55%',
+        letterSpacing: '.01em', maxWidth: 'min(55%, 320px)',
         pointerEvents: 'none',
       }}>
         {project.title}
@@ -316,9 +359,12 @@ function WorkItem({ project, index }) {
         position: 'absolute',
         bottom: 'clamp(32px,5vh,60px)',
         right:  'clamp(24px,5vw,64px)',
-        fontFamily: 'var(--body)', fontSize: 11, fontWeight: 300,
+        fontFamily: 'var(--body)', fontSize: 'clamp(9px, 2.5vw, 11px)',
+        fontWeight: 300,
         letterSpacing: '.14em', textTransform: 'uppercase',
         color: 'rgba(255,255,255,.5)', pointerEvents: 'none',
+        textAlign: 'right',
+        maxWidth: 'min(45%, 260px)',
       }}>
         {project.tags}
       </p>
@@ -421,22 +467,22 @@ function WorkHero() {
       <div style={{
         position:'relative', zIndex:2,
         width:'100%', maxWidth:1320, margin:'0 auto',
-        padding:'clamp(80px,10vw,140px) clamp(24px,5vw,64px) clamp(56px,8vw,96px)',
-        display:'grid', gridTemplateColumns:'1fr 1fr',
+        padding:'clamp(60px,10vw,140px) clamp(24px,5vw,64px) clamp(48px,8vw,96px)',
+        display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))',
         alignItems:'flex-end', gap:'clamp(24px,4vw,60px)',
       }}>
         <h1 className="rv" style={{
           fontFamily:'var(--disp)',
-          fontSize:'clamp(96px,14vw,200px)',
+          fontSize:'clamp(56px,14vw,200px)',
           color:'var(--white)', textTransform:'uppercase',
           lineHeight:.88, letterSpacing:'-.01em',
         }}>
           Selected Work
         </h1>
-        <div style={{ display:'flex', flexDirection:'column', gap:32 }}>
+        <div style={{ display:'flex', flexDirection:'column', gap:'clamp(24px, 4vw, 32px)' }}>
           <p className="rv d1" style={{
             fontFamily:'var(--body)',
-            fontSize:'clamp(15px,1.35vw,19px)',
+            fontSize:'clamp(14px, 1.35vw, 19px)',
             fontWeight:300, color:'rgba(255,255,255,.8)', lineHeight:1.62,
           }}>
             Explore a collection of high-quality, innovative designs crafted to
@@ -449,7 +495,20 @@ function WorkHero() {
         </div>
       </div>
 
-      <style>{`@media(max-width:640px){#work>div:last-child{grid-template-columns:1fr!important}}`}</style>
+      <style>{`
+        @media(max-width:640px){
+          #work>div:last-child {
+            grid-template-columns: 1fr !important;
+            text-align: center;
+            justify-items: center;
+          }
+        }
+        @media (max-width: 480px) {
+          #work>div:last-child {
+            padding: clamp(40px, 10vw, 140px) clamp(16px, 5vw, 64px) clamp(32px, 8vw, 96px);
+          }
+        }
+      `}</style>
     </section>
   )
 }

@@ -130,24 +130,24 @@ function ExploreBtn({ href = '#' }) {
 ════════════════════════════════════════════════════════════════ */
 const PROJECTS = [
   {
-    id: 1, title: 'CardioRisk AI', tags: 'Web · Graphic · Design System', href: '#',
+    id: 1, title: 'CardioRisk AI', tags: 'Machine Learning ·  Model Persistence · Streamlit', href: 'https://cardioriskai.streamlit.app/',
+    bg:    'https://d2cxceko1uvz80.cloudfront.net/cardiobg.jpg',
+    thumb: 'https://d2cxceko1uvz80.cloudfront.net/cardio.webp',
+  },
+  {
+    id: 2, title: 'Derivium', tags: 'Web · 3D Visualization · Symbolic Math', href: 'https://derivium-coral.vercel.app/',
     bg:    'https://framerusercontent.com/images/BO4v1zzGmf5eA3osW1s6v8M5w.jpg',
-    thumb: 'https://framerusercontent.com/images/STkYjWaM1i6wmnTh4yIibvmvo.jpg',
+    thumb: 'https://d2cxceko1uvz80.cloudfront.net/derivium.webp',
   },
   {
-    id: 2, title: 'Derivium', tags: 'Web · UIUX Design', href: '#',
+    id: 3, title: 'Significo', tags: 'Web · Vanilla JS · CI/CD', href: 'https://significo-clone.s3.eu-north-1.amazonaws.com/index.html',
     bg:    'https://framerusercontent.com/images/LoZV0FH52pU8337Nsd1aPAKxHls.jpg',
-    thumb: 'https://framerusercontent.com/images/uwCoWT88FzkcqDimC5dJXABxf8.jpg',
+    thumb: 'https://d2cxceko1uvz80.cloudfront.net/significo.webp',
   },
   {
-    id: 3, title: 'Significo', tags: 'Web · Graphic · Design System', href: '#',
-    bg:    'https://framerusercontent.com/images/tCFr40M0o41bj4k2xuo4V2clHE.jpg',
-    thumb: 'https://framerusercontent.com/images/tje0Em6vQwf5h3v6Gl50HtZhoKc.jpg',
-  },
-  {
-    id: 4, title: 'GameNight', tags: 'Exhibition · Event', href: '#',
-    bg:    'https://framerusercontent.com/images/1iFdgCFa8kd2c18qh6Z0jKqlmo.jpg',
-    thumb: 'https://framerusercontent.com/images/ItXJ5IsTSqq5PT82XDRrmABqkZk.jpg',
+    id: 4, title: 'GameNight', tags: 'Linux Server · Game Development · Reverse Engineering', href: 'https://discord.gg/RPmARKDc6f',
+    bg:    'https://d2cxceko1uvz80.cloudfront.net/gamenightbg.jpg',
+    thumb: 'https://d2cxceko1uvz80.cloudfront.net/gamenight.webp',
   },
 ]
 

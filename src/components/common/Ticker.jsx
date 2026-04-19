@@ -67,7 +67,7 @@ const Ticker = () => {
   }, []);
 
   return (
-    <div className="w-full overflow-hidden py-5 bg-purple-800">
+    <div className="w-full overflow-hidden py-5 bg-purple-900">
       {/* Outer container with subtle background (optional) */}
       <div className="relative">
         {/* Ticker container */}

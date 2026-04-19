@@ -60,9 +60,9 @@ function App() {
             <Hero />
           </section>
           
-          <section id="about" className="min-h-screen overflow-hidden">
+          {/* <section id="about" className="min-h-screen overflow-hidden">
             <About />
-          </section>
+          </section> */}
           
           <Ticker />
           <section id="projects" className="min-h-screen overflow-hidden">

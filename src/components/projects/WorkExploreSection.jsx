@@ -485,9 +485,7 @@ function WorkHero() {
             fontSize:'clamp(14px, 1.35vw, 19px)',
             fontWeight:300, color:'rgba(255,255,255,.8)', lineHeight:1.62,
           }}>
-            Explore a collection of high-quality, innovative designs crafted to
-            elevate brands and captivate audiences. Each project reflects our
-            commitment to creativity and excellence.
+            Explore a portfolio of high-impact, intelligently engineered designs from AI-driven risk assessment tools to pixel perfect static deployments built to elevate brands and engage audiences. Each project reflects my dedication to creativity, technical excellence, and data informed craftsmanship.
           </p>
           <div className="rv d2">
             <ExploreBtn href="https://github.com/tahahssn" />

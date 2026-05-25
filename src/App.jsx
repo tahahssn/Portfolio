@@ -63,8 +63,6 @@ function App() {
           {/* <section id="about" className="min-h-screen overflow-hidden">
             <About />
           </section> */}
-          
-          <Ticker />
           <section id="projects" className="min-h-screen overflow-hidden">
             <Projects />
           </section>

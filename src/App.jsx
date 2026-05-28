@@ -5,7 +5,6 @@ import Preloader from "./components/common/Preloader";
 import Hero from "./pages/Hero";
 import About from "./pages/About";
 import Projects from "./pages/Projects";
-import Ticker from "./components/common/Ticker";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);

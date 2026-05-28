@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 ::-webkit-scrollbar {
-  width: 12px;     
-  height: 12px;   
+  width: 12px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
@@ -25,7 +25,7 @@
   src: url("/fonts/honer-those.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
-  font-display: swap; 
+  font-display: swap;
 }
 
 @font-face {
@@ -33,7 +33,7 @@
   src: url("/fonts/BeStrong-MVYAv.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
-  font-display: swap; 
+  font-display: swap;
 }
 
 @font-face {
@@ -41,14 +41,14 @@
   src: url("/fonts/doner-regulardisplay.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
-  font-display: swap; 
+  font-display: swap;
 }
 
 @font-face {
   font-family: "GCGudlakDemo";
   src: url("/fonts/GCGudlakDemo-SemiBold-BF695cd59bc5211.ttf") format("truetype");
   font-style: normal;
-  font-display: swap; 
+  font-display: swap;
 }
 
 
@@ -57,7 +57,7 @@
   src: url("/fonts/Bremer.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
-  font-display: swap; 
+  font-display: swap;
 }
 
 @font-face {
@@ -65,7 +65,7 @@
   src: url("/fonts/Dangerous-BF694a9ca521b88.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
-  font-display: swap; 
+  font-display: swap;
 }
 
 @font-face {
@@ -73,7 +73,7 @@
   src: url("/fonts/MEIRO.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
-  font-display: swap; 
+  font-display: swap;
 }
 
 @font-face {
@@ -81,11 +81,12 @@
   src: url("/fonts/Newborn-BF694aa0119bfca.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
-  font-display: swap; 
+  font-display: swap;
 }
 
 img {
   width: 100%;
   height: auto;
-  aspect-ratio: attr(width) / attr(height); /* Maintains aspect ratio */
+  aspect-ratio: attr(width) / attr(height);
+  /* Maintains aspect ratio */
 }

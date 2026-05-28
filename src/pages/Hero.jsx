@@ -6,9 +6,9 @@ import Backdrop from '../components/home/Backdrop'
 const Home = () => {
   return (
     <div className="h-screen w-screen overflow-hidden">
-      <Paragraph/>
-      <Title/>
-      <Backdrop/>
+      <Paragraph />
+      <Title />
+      <Backdrop />
     </div>
   )
 }

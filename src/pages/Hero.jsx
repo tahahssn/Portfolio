@@ -1,24 +1,18 @@
 import React from "react";
 
-import Paragraph from "../components/home/Paragraph";
-import Title from "../components/home/Title";
 import Backdrop from "../components/home/Backdrop";
+import HeroContent from "../components/home/HeroContent";
 
-const Home = () => {
+const Hero = () => {
   return (
-    <div className="relative h-screen w-screen overflow-hidden bg-black">
-
-      {/* WebGL hero */}
+    <section className="relative h-screen w-screen overflow-hidden bg-black">
+      {/* Living WebGL visual */}
       <Backdrop />
 
-      {/* Content */}
-      <div className="relative z-10 h-full w-full">
-        <Paragraph />
-        <Title />
-      </div>
-
-    </div>
+      {/* Typography / interaction layer */}
+      <HeroContent />
+    </section>
   );
 };
 
-export default Home;
+export default Hero;

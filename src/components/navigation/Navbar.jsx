@@ -1,401 +1,818 @@
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import { FaGithub } from 'react-icons/fa6';
-import { FaLinkedin } from 'react-icons/fa6';
-import { FaInstagram } from 'react-icons/fa6';
-import { FaPatreon } from 'react-icons/fa6';
+import {
+  FaGithub,
+  FaLinkedin,
+  FaInstagram,
+  FaPatreon,
+} from "react-icons/fa6";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const menuRef = useRef(null);
-  const menuBgRef = useRef(null);
-  const itemsRef = useRef([]);
-  const logoRef = useRef(null);
-  const resumeBtnRef = useRef(null);
-  const hoverBgRefs = useRef([]);
-  const emailRef = useRef(null);
-  const emailRollTextRef = useRef(null);
-  const socialRefs = useRef([]);
-  const tl = useRef(null);
 
-  // Social media data
+  const navbarRef = useRef(null);
+
+  const logoRef = useRef(null);
+  const menuTriggerRef = useRef(null);
+
+  const overlayRef = useRef(null);
+
+  const menuLogoRef = useRef(null);
+  const closeTriggerRef = useRef(null);
+
+  const menuLinksRef = useRef([]);
+  const menuNumbersRef = useRef([]);
+
+  const rightColumnRef = useRef(null);
+  const emailBlockRef = useRef(null);
+  const elsewhereBlockRef = useRef(null);
+  const resumeRef = useRef(null);
+  const socialRefs = useRef([]);
+
+  const timelineRef = useRef(null);
+
   const socialLinks = [
-    { icon: FaGithub, link: "https://github.com/tahahssn", color: "#fff" },
-    { icon: FaLinkedin, link: "https://www.linkedin.com/in/syed-muhammad-taha-hassan-72aa22383/", color: "#0077b5" },
-    { icon: FaPatreon, link: "https://www.patreon.com/cw/SyedTahaHassan", color: "#FF424D" },
-    { icon: FaInstagram, link: "https://www.instagram.com/taha.hassan.35/", color: "#e4405f" },
+    {
+      label: "GitHub",
+      href: "https://github.com/tahahssn",
+      icon: FaGithub,
+    },
+    {
+      label: "LinkedIn",
+      href: "https://www.linkedin.com/in/syed-muhammad-taha-hassan-72aa22383/",
+      icon: FaLinkedin,
+    },
+    {
+      label: "Instagram",
+      href: "https://www.instagram.com/taha.hassan.35/",
+      icon: FaInstagram,
+    },
+    {
+      label: "Patreon",
+      href: "https://www.patreon.com/cw/SyedTahaHassan",
+      icon: FaPatreon,
+    },
   ];
 
-  useEffect(() => {
-    tl.current = gsap.timeline({ paused: true });
+  const menuItems = [
+    {
+      number: "01",
+      name: "WORK",
+      sectionId: "projects",
+    },
+    {
+      number: "02",
+      name: "ABOUT",
+      sectionId: "about",
+    },
+    {
+      number: "03",
+      name: "CONTACT",
+      sectionId: "contact",
+    },
+  ];
 
-    // 1. Background slides down from top
-    tl.current.fromTo(
-      menuBgRef.current,
-      { y: "-100%" },
-      {
-        y: "0%",
-        duration: 0.6,
-        ease: "power2.inOut",
-      }
-    );
+  // ==========================================================
+  // INITIAL NAVBAR ENTRANCE
+  // ==========================================================
 
-    // 2. Menu content appears
-    tl.current.to(
-      menuRef.current,
-      {
-        opacity: 1,
-        duration: 0.5,
-        ease: "power2.out",
-      },
-      "-=0.2"
-    );
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.set(
+        [logoRef.current, menuTriggerRef.current],
+        {
+          y: -24,
+          opacity: 0,
+        }
+      );
 
-    // 3. Menu items animate in
-    tl.current.fromTo(
-      itemsRef.current,
-      { y: 40, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        stagger: 0.12,
-        duration: 0.6,
-        ease: "power3.out",
-      },
-      "-=0.4"
-    );
+      gsap.to(
+        [logoRef.current, menuTriggerRef.current],
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          delay: 0.35,
+          stagger: 0.08,
+          ease: "power3.out",
+          overwrite: true,
+        }
+      );
+    }, navbarRef);
 
-    // 4. Email appears (bottom right)
-    tl.current.fromTo(
-      emailRef.current,
-      { y: 30, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.5,
-        ease: "power2.out",
-      },
-      "-=0.3"
-    );
-
-    // 5. Social icons appear (bottom left)
-    tl.current.fromTo(
-      socialRefs.current,
-      { y: 30, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        stagger: 0.05,
-        duration: 0.5,
-        ease: "power2.out",
-      },
-      "-=0.2"
-    );
-
-    // 6. Logo fades out
-    tl.current.to(
-      logoRef.current,
-      {
-        opacity: 0,
-        pointerEvents: "none",
-        duration: 0.3,
-      },
-      0
-    );
-
-    // 7. Resume button fades out when menu opens
-    tl.current.to(
-      resumeBtnRef.current,
-      {
-        opacity: 0,
-        pointerEvents: "none",
-        duration: 0.3,
-      },
-      0
-    );
+    return () => ctx.revert();
   }, []);
 
-  useEffect(() => {
-    if (isOpen) {
-      gsap.set(menuRef.current, { display: "flex" });
-      gsap.set(menuBgRef.current, { display: "block" });
-      tl.current.play();
-    } else {
-      tl.current.reverse();
-      tl.current.eventCallback("onReverseComplete", () => {
-        gsap.set(menuRef.current, { display: "none" });
-        gsap.set(menuBgRef.current, { display: "none" });
+  // ==========================================================
+  // MASTER MENU TIMELINE
+  //
+  // THIS TIMELINE IS THE IMPORTANT PART.
+  //
+  // OPEN  = play()
+  // CLOSE = reverse()
+  //
+  // Therefore the close animation is automatically the exact
+  // reverse of the open animation.
+  // ==========================================================
+
+  useLayoutEffect(() => {
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline({
+        paused: true,
+        defaults: {
+          overwrite: "auto",
+        },
       });
+
+      timelineRef.current = tl;
+
+      // ------------------------------------------------------
+      // INITIAL STATES
+      // ------------------------------------------------------
+
+      gsap.set(overlayRef.current, {
+        yPercent: -100,
+        pointerEvents: "none",
+      });
+
+      gsap.set(
+        [
+          menuLogoRef.current,
+          closeTriggerRef.current,
+        ],
+        {
+          opacity: 0,
+        }
+      );
+
+      gsap.set(menuLinksRef.current, {
+        y: 28,
+        opacity: 0,
+      });
+
+      gsap.set(menuNumbersRef.current, {
+        y: 12,
+        opacity: 0,
+      });
+
+      gsap.set(rightColumnRef.current, {
+        y: 24,
+        opacity: 0,
+      });
+
+      gsap.set(
+        [
+          emailBlockRef.current,
+          elsewhereBlockRef.current,
+          resumeRef.current,
+        ],
+        {
+          y: 16,
+          opacity: 0,
+        }
+      );
+
+      gsap.set(socialRefs.current, {
+        y: 10,
+        opacity: 0,
+      });
+
+      // ------------------------------------------------------
+      // 01 — CLOSED NAVBAR FADES AWAY
+      //
+      // It DOES NOT MOVE.
+      // ------------------------------------------------------
+
+      tl.to(
+        [logoRef.current, menuTriggerRef.current],
+        {
+          opacity: 0,
+          duration: 0.42,
+          ease: "power2.inOut",
+        },
+        0
+      );
+
+      // ------------------------------------------------------
+      // 02 — BLACK SCREEN COMES DOWN FROM TOP
+      // ------------------------------------------------------
+
+      tl.to(
+        overlayRef.current,
+        {
+          yPercent: 0,
+          pointerEvents: "auto",
+          duration: 0.72,
+          ease: [0.76, 0, 0.24, 1],
+        },
+        0
+      );
+
+      // ------------------------------------------------------
+      // 03 — MENU HEADER FADES IN
+      // ------------------------------------------------------
+
+      tl.to(
+        [
+          menuLogoRef.current,
+          closeTriggerRef.current,
+        ],
+        {
+          opacity: 1,
+          duration: 0.46,
+          stagger: 0.06,
+          ease: "power2.out",
+        },
+        0.42
+      );
+
+      // ------------------------------------------------------
+      // 04 — MENU NUMBERS
+      // ------------------------------------------------------
+
+      tl.to(
+        menuNumbersRef.current,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.45,
+          stagger: 0.06,
+          ease: "power3.out",
+        },
+        0.46
+      );
+
+      // ------------------------------------------------------
+      // 05 — MENU LINKS
+      // ------------------------------------------------------
+
+      tl.to(
+        menuLinksRef.current,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.62,
+          stagger: 0.08,
+          ease: [0.22, 1, 0.36, 1],
+        },
+        0.40
+      );
+
+      // ------------------------------------------------------
+      // 06 — RIGHT COLUMN
+      // ------------------------------------------------------
+
+      tl.to(
+        rightColumnRef.current,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.52,
+          ease: "power3.out",
+        },
+        0.58
+      );
+
+      // ------------------------------------------------------
+      // 07 — EMAIL
+      // ------------------------------------------------------
+
+      tl.to(
+        emailBlockRef.current,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.45,
+          ease: "power3.out",
+        },
+        0.66
+      );
+
+      // ------------------------------------------------------
+      // 08 — ELSEWHERE
+      // ------------------------------------------------------
+
+      tl.to(
+        elsewhereBlockRef.current,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.45,
+          ease: "power3.out",
+        },
+        0.71
+      );
+
+      // ------------------------------------------------------
+      // 09 — SOCIALS
+      // ------------------------------------------------------
+
+      tl.to(
+        socialRefs.current,
+        {
+          y: 0,
+          opacity: 0.72,
+          duration: 0.4,
+          stagger: 0.04,
+          ease: "power3.out",
+        },
+        0.74
+      );
+
+      // ------------------------------------------------------
+      // 10 — RESUME
+      // ------------------------------------------------------
+
+      tl.to(
+        resumeRef.current,
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.42,
+          ease: "power3.out",
+        },
+        0.78
+      );
+    }, navbarRef);
+
+    return () => {
+      timelineRef.current?.kill();
+      ctx.revert();
+    };
+  }, []);
+
+  // ==========================================================
+  // PLAY / REVERSE MASTER TIMELINE
+  // ==========================================================
+
+  useEffect(() => {
+    const tl = timelineRef.current;
+
+    if (!tl) return;
+
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+
+      /*
+       * Play forward.
+       */
+      tl.play();
+    } else {
+      /*
+       * Reverse the exact same animation.
+       */
+      tl.reverse();
+
+      tl.eventCallback(
+        "onReverseComplete",
+        () => {
+          document.body.style.overflow = "";
+        }
+      );
     }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
-  // Handle hover effects for menu links
-  const handleMouseEnter = (index) => {
-    const hoverBg = hoverBgRefs.current[index];
-    if (hoverBg) {
-      gsap.to(hoverBg, {
-        y: "0%",
-        opacity: 1,
-        duration: 0.3,
-        ease: "power2.out",
-      });
-    }
-  };
+  // ==========================================================
+  // LINK HOVER
+  // ==========================================================
 
-  const handleMouseLeave = (index) => {
-    const hoverBg = hoverBgRefs.current[index];
-    if (hoverBg) {
-      gsap.to(hoverBg, {
-        y: "100%",
-        opacity: 0,
-        duration: 0.3,
-        ease: "power2.out",
-      });
-    }
-  };
+  const handleLinkEnter = (index) => {
+    const link = menuLinksRef.current[index];
 
-  // Handle email roll text effect
-  const handleEmailMouseEnter = () => {
-    if (emailRollTextRef.current) {
-      gsap.to(emailRollTextRef.current.querySelector('.svg-icon'), {
-        rotation: 0,
-        duration: 0.5,
-        ease: "power2.out",
-      });
-    }
-  };
+    if (!link) return;
 
-  const handleEmailMouseLeave = () => {
-    if (emailRollTextRef.current) {
-      gsap.to(emailRollTextRef.current.querySelector('.svg-icon'), {
-        rotation: -45,
-        duration: 0.5,
-        ease: "power2.out",
-      });
-    }
-  };
-
-  // Handle social icon hover
-  const handleSocialMouseEnter = (index) => {
-    const icon = socialRefs.current[index];
-    if (icon) {
-      gsap.to(icon, {
-        scale: 1.3,
-        y: -5,
-        duration: 0.3,
-        ease: "back.out(1.7)",
-      });
-    }
-  };
-
-  const handleSocialMouseLeave = (index) => {
-    const icon = socialRefs.current[index];
-    if (icon) {
-      gsap.to(icon, {
-        scale: 1,
-        y: 0,
-        duration: 0.3,
-        ease: "power2.out",
-      });
-    }
-  };
-
-  // Handle smooth scroll to sections
-  const handleLinkClick = (sectionId) => {
-    setIsOpen(false);
-    
-    setTimeout(() => {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        const yOffset = -80;
-        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        
-        window.scrollTo({
-          top: y,
-          behavior: 'smooth'
-        });
-      }
-    }, 500);
-  };
-
-  // Scroll to top when clicking logo
-  const handleLogoClick = (e) => {
-    e.preventDefault();
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
+    gsap.to(link, {
+      x: 10,
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1],
+      overwrite: "auto",
     });
   };
 
-  // Handle resume download
-  const handleResumeDownload = () => {
-    const resumeUrl = "./public/taha's_resume.pdf";
-    const link = document.createElement('a');
-    link.href = resumeUrl;
+  const handleLinkLeave = (index) => {
+    const link = menuLinksRef.current[index];
+
+    if (!link) return;
+
+    gsap.to(link, {
+      x: 0,
+      duration: 0.45,
+      ease: [0.22, 1, 0.36, 1],
+      overwrite: "auto",
+    });
+  };
+
+  // ==========================================================
+  // LOGO
+  // ==========================================================
+
+  const handleLogoClick = (event) => {
+    event.preventDefault();
+
+    if (isOpen) {
+      setIsOpen(false);
+
+      window.setTimeout(() => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      }, 750);
+
+      return;
+    }
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  // ==========================================================
+  // NAVIGATION
+  // ==========================================================
+
+  const handleNavigation = (sectionId) => {
+    setIsOpen(false);
+
+    window.setTimeout(() => {
+      const element =
+        document.getElementById(sectionId);
+
+      if (!element) return;
+
+      const y =
+        element.getBoundingClientRect().top +
+        window.scrollY;
+
+      window.scrollTo({
+        top: y,
+        behavior: "smooth",
+      });
+    }, 750);
+  };
+
+  // ==========================================================
+  // RESUME
+  // ==========================================================
+
+  const handleResume = () => {
+    const link =
+      document.createElement("a");
+
+    link.href = "/taha's_resume.pdf";
     link.download = "taha's_resume.pdf";
+
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
-  const menuItems = [
-    { name: "Home", sectionId: "home" },
-    { name: "Projects", sectionId: "projects" },
-    { name: "Contact", sectionId: "contact" },
-  ];
+  // ==========================================================
+  // EMAIL HOVER
+  // ==========================================================
+
+  const handleEmailEnter = () => {
+    const arrow =
+      emailBlockRef.current?.querySelector(
+        "[data-email-arrow]"
+      );
+
+    if (!arrow) return;
+
+    gsap.to(arrow, {
+      x: 6,
+      y: -6,
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1],
+      overwrite: "auto",
+    });
+  };
+
+  const handleEmailLeave = () => {
+    const arrow =
+      emailBlockRef.current?.querySelector(
+        "[data-email-arrow]"
+      );
+
+    if (!arrow) return;
+
+    gsap.to(arrow, {
+      x: 0,
+      y: 0,
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1],
+      overwrite: "auto",
+    });
+  };
+
+  // ==========================================================
+  // SOCIAL HOVER
+  // ==========================================================
+
+  const handleSocialEnter = (index) => {
+    const social =
+      socialRefs.current[index];
+
+    if (!social) return;
+
+    gsap.to(social, {
+      x: 5,
+      opacity: 1,
+      duration: 0.35,
+      ease: [0.22, 1, 0.36, 1],
+      overwrite: "auto",
+    });
+  };
+
+  const handleSocialLeave = (index) => {
+    const social =
+      socialRefs.current[index];
+
+    if (!social) return;
+
+    gsap.to(social, {
+      x: 0,
+      opacity: 0.72,
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1],
+      overwrite: "auto",
+    });
+  };
 
   return (
     <>
-      <nav className="absolute top-0 left-0 w-full z-50 px-4 sm:px-6 py-2 flex items-center justify-between bg-transparent">
-        {/* Logo - scrolls to top */}
-        <button
-          onClick={handleLogoClick}
-          ref={logoRef}
-          className="text-xl font-[honer-those] font-[100] tracking-wide text-white cursor-pointer"
-          aria-label="Scroll to top"
-        >
-          <img className="w-12 h-12 sm:w-16 sm:h-16 filter invert cursor-pointer" src="/logo.webp" alt="Taha Hassan Logo" />
-        </button>
+      {/* ======================================================
+          NORMAL NAVBAR
+      ======================================================= */}
 
-        {/* Right side: Resume Button + Hamburger */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          {/* Resume Button - Integrated directly */}
-          <div ref={resumeBtnRef}>
-            <button
-              onClick={handleResumeDownload}
-              className="group relative inline-block border-2 border-white bg-transparent px-1.5 py-1.5 sm:px-2 sm:py-2 text-center font-bold uppercase tracking-wider text-white transition-all duration-300 ease-in-out hover:bg-white"
-              aria-label="Download Resume"
-            >
-              {/* Top key */}
-              <span className="absolute left-1.5 sm:left-2.5 top-[-2px] h-0.5 w-4 sm:w-6 bg-[#212121] transition-all duration-500 ease-out group-hover:left-[-2px] group-hover:w-0" />
-              
-              {/* Button text */}
-              <span className="relative block pl-2 sm:pl-4 text-[10px] sm:text-xs leading-normal transition-all duration-300 ease-in-out group-hover:pl-3 sm:group-hover:pl-6 group-hover:text-black">
-                RESUME
-              </span>
-              
-              {/* Bottom key 1 */}
-              <span className="absolute bottom-[-2px] right-4 sm:right-7 h-0.5 w-4 sm:w-6 bg-[#212121] transition-all duration-500 ease-out group-hover:right-0 group-hover:w-0" />
-              
-              {/* Bottom key 2 */}
-              <span className="absolute bottom-[-2px] right-1.5 sm:right-2.5 h-0.5 w-1.5 sm:w-2.5 bg-[#212121] transition-all duration-500 ease-out group-hover:right-0 group-hover:w-0" />
-              
-              {/* Left line */}
-              <span className="absolute left-2 sm:left-3 top-1/2 h-0.5 w-1 sm:w-1.5 -translate-y-1/2 bg-white transition-all duration-300 ease-linear group-hover:w-2 sm:group-hover:w-3.5 group-hover:bg-black" />
-            </button>
-          </div>
+      <nav
+        ref={navbarRef}
+        className="fixed left-0 top-0 z-[9000] w-full px-5 py-5 sm:px-7 md:px-9"
+      >
+        <div className="flex items-center justify-between">
+          {/* LOGO */}
 
-          {/* Hamburger Button */}
           <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="flex flex-col gap-1.5 z-50 px-3"
-            aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"} 
+            ref={logoRef}
+            type="button"
+            onClick={handleLogoClick}
+            aria-label="Go to top"
+            className="group flex h-12 w-12 items-center justify-center sm:h-14 sm:w-14"
           >
-            <span 
-              className={`w-5 sm:w-6 h-0.5 bg-white transition-transform duration-300 ${
-                isOpen ? "rotate-45 translate-y-2" : ""
-              }`}
+            <img
+              src="/logo.webp"
+              alt="Taha Hassan"
+              className="h-full w-full object-contain invert transition-transform duration-500 ease-out group-hover:scale-[0.94]"
             />
-            <span
-              className={`w-5 sm:w-6 h-0.5 bg-white transition-transform duration-300 ${
-                isOpen ? "-rotate-45 -translate-y-1/2" : ""
-              }`}
-            />
+          </button>
+
+          {/* MENU */}
+
+          <button
+            ref={menuTriggerRef}
+            type="button"
+            onClick={() => setIsOpen((prev) => !prev)}
+            aria-expanded={isOpen}
+            aria-label={
+              isOpen
+                ? "Close navigation"
+                : "Open navigation"
+            }
+            className="group flex items-center gap-3 text-white"
+          >
+            <span className="font-[doner] text-[11px] uppercase tracking-[0.24em] sm:text-xs">
+              Menu
+            </span>
+
+            <span className="relative flex h-5 w-5 items-center justify-center">
+              <span className="absolute h-[1px] w-5 -translate-y-[3px] bg-white transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]" />
+
+              <span className="absolute h-[1px] w-5 translate-y-[3px] bg-white transition-all duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]" />
+            </span>
           </button>
         </div>
       </nav>
 
-      {/* Background that slides from top */}
-      <div ref={menuBgRef} className="fixed inset-0 bg-black z-40 hidden" />
+      {/* ======================================================
+          FULLSCREEN MENU
+      ======================================================= */}
 
-      {/* Menu content */}
       <div
-        ref={menuRef}
-        className="fixed inset-0 z-40 hidden items-center justify-center"
+        ref={overlayRef}
+        className="fixed inset-0 z-[8999] overflow-hidden bg-black"
       >
-        {/* Main Navigation Links */}
-        <ul className="text-center font-[doner] text-4xl sm:text-5xl md:text-6xl font-bold tracking-wide text-[#b4c3d9] w-full">
-          {menuItems.map((item, index) => (
-            <li
-              key={item.sectionId}
-              ref={(el) => (itemsRef.current[index] = el)}
-              className="relative border-b border-zinc-600 overflow-hidden w-full bottom-8"
-              onMouseEnter={() => handleMouseEnter(index)}
-              onMouseLeave={() => handleMouseLeave(index)}
+        <div className="relative h-full w-full px-6 pb-7 pt-7 sm:px-8 sm:pb-8 md:px-10 md:pt-8">
+          {/* ==================================================
+              MENU HEADER
+          =================================================== */}
+
+          <div className="flex items-center justify-between">
+            <div
+              ref={menuLogoRef}
+              className="flex h-12 w-12 items-center justify-center sm:h-14 sm:w-14"
             >
-              {/* Hover background */}
-              <div
-                ref={(el) => (hoverBgRefs.current[index] = el)}
-                className="absolute bottom-0 left-0 w-full h-full bg-[#94bcf7] transform translate-y-full opacity-0 pointer-events-none"
-                style={{ zIndex: -1 }}
+              <img
+                src="/logo.webp"
+                alt="Taha Hassan"
+                className="h-full w-full object-contain invert"
               />
+            </div>
 
-              {/* Anchor link for single page */}
-              <a
-                href={`#${item.sectionId}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleLinkClick(item.sectionId);
-                }}
-                className="block w-full py-1.5 top-1 hover:text-black duration-300 cursor-pointer relative z-10 text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
-              >
-                {item.name}
-              </a>
-            </li>
-          ))}
-        </ul>
+            {/* CLOSE */}
 
-        {/* Social Links - Bottom Left */}
-        <div className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-4 sm:left-6 md:left-8">
-          <div className="flex items-center space-x-3 sm:space-x-4">
-            {socialLinks.map((social, index) => {
-              const Icon = social.icon;
-              return (
-                <a
-                  key={index}
-                  ref={(el) => (socialRefs.current[index] = el)}
-                  href={social.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xl sm:text-2xl text-white hover:opacity-100 opacity-80 transition-all duration-300"
-                  style={{ color: social.color }}
-                  onMouseEnter={() => handleSocialMouseEnter(index)}
-                  onMouseLeave={() => handleSocialMouseLeave(index)}
-                >
-                  <Icon />
-                </a>
-              );
-            })}
+            <button
+              ref={closeTriggerRef}
+              type="button"
+              onClick={() => setIsOpen(false)}
+              aria-label="Close navigation"
+              className="group flex items-center gap-3 text-white"
+            >
+              <span className="font-[doner] text-[11px] uppercase tracking-[0.24em] sm:text-xs">
+                Close
+              </span>
+
+              <span className="relative flex h-5 w-5 items-center justify-center">
+                <span className="absolute h-[1px] w-5 rotate-45 bg-white" />
+                <span className="absolute h-[1px] w-5 -rotate-45 bg-white" />
+              </span>
+            </button>
           </div>
-        </div>
 
-        {/* Email - Bottom Right */}
-        <div 
-          ref={emailRef}
-          className="absolute bottom-4 sm:bottom-6 md:bottom-8 right-4 sm:right-6 md:right-8 text-right max-w-[calc(100%-2rem)] sm:max-w-none"
-        >
-          <div className="mb-1 sm:mb-2 text-xs sm:text-sm text-gray-400">GET IN TOUCH</div>
-          <div
-            ref={emailRollTextRef}
-            onMouseEnter={handleEmailMouseEnter}
-            onMouseLeave={handleEmailMouseLeave}
-            className="inline-flex items-center cursor-pointer group flex-wrap sm:flex-nowrap justify-end"
-          >
-            <a 
-              href="mailto:tahahassan699@gmail.com" 
-              className="relative text-sm sm:text-base md:text-xl font-medium text-gray-400 group-hover:text-white transition-colors duration-400 mr-2 sm:mr-3 break-all sm:break-normal"
+          {/* ==================================================
+              MAIN CONTENT
+          =================================================== */}
+
+          <div className="grid h-[calc(100%-6rem)] grid-cols-1 items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-20">
+            {/* =================================================
+                LINKS
+            ================================================== */}
+
+            <nav
+              aria-label="Main navigation"
+              className="self-center"
             >
-              tahahassan699@gmail.com
-              <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white group-hover:w-full transition-all duration-500 ease-[cubic-bezier(0.25,0.8,0.25,1)]"></span>
-            </a>
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              viewBox="0 0 448 512" 
-              className="svg-icon w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 fill-gray-400 group-hover:fill-white transition-all duration-500 flex-shrink-0"
-              style={{ transform: 'rotate(-45deg)' }}
+              <ul className="m-0 list-none p-0">
+                {menuItems.map((item, index) => (
+                  <li
+                    key={item.sectionId}
+                    className="mb-5 last:mb-0 sm:mb-6 md:mb-7"
+                  >
+                    <a
+                      href={`#${item.sectionId}`}
+                      onClick={(event) => {
+                        event.preventDefault();
+
+                        handleNavigation(
+                          item.sectionId
+                        );
+                      }}
+                      onMouseEnter={() =>
+                        handleLinkEnter(index)
+                      }
+                      onMouseLeave={() =>
+                        handleLinkLeave(index)
+                      }
+                      className="group flex w-fit items-baseline gap-5"
+                    >
+                      {/* NUMBER */}
+
+                      <span
+                        ref={(el) => {
+                          menuNumbersRef.current[index] =
+                            el;
+                        }}
+                        className="w-6 font-[doner] text-[10px] tracking-[0.15em] text-white/35 sm:text-xs"
+                      >
+                        {item.number}
+                      </span>
+
+                      {/* LINK */}
+
+                      <span
+                        ref={(el) => {
+                          menuLinksRef.current[index] =
+                            el;
+                        }}
+                        className="font-[doner] text-[clamp(3rem,6vw,6rem)] font-medium leading-[0.88] tracking-[-0.045em] text-white transition-colors duration-300 group-hover:text-white/75"
+                      >
+                        {item.name}
+                      </span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+
+            {/* =================================================
+                RIGHT COLUMN
+            ================================================== */}
+
+            <div
+              ref={rightColumnRef}
+              className="self-center lg:justify-self-end lg:w-[min(100%,420px)]"
             >
-              <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />
-            </svg>
+              {/* EMAIL */}
+
+              <div
+                ref={emailBlockRef}
+                className="mb-10"
+              >
+                <p className="mb-3 font-[doner] text-[10px] uppercase tracking-[0.2em] text-white/35 sm:text-xs">
+                  Get in touch
+                </p>
+
+                <a
+                  href="mailto:tahahassan699@gmail.com"
+                  onMouseEnter={
+                    handleEmailEnter
+                  }
+                  onMouseLeave={
+                    handleEmailLeave
+                  }
+                  className="group inline-flex items-center gap-3 font-[doner] text-[clamp(1.1rem,1.7vw,1.6rem)] text-white/90 transition-colors duration-300"
+                >
+                  <span>
+                    tahahassan699@gmail.com
+                  </span>
+
+                  <span
+                    data-email-arrow
+                    className="inline-block"
+                  >
+                    ↗
+                  </span>
+                </a>
+              </div>
+
+              {/* ELSEWHERE */}
+
+              <div
+                ref={elsewhereBlockRef}
+                className="mb-10"
+              >
+                <p className="mb-3 font-[doner] text-[10px] uppercase tracking-[0.2em] text-white/35 sm:text-xs">
+                  Elsewhere
+                </p>
+
+                <div className="flex flex-col items-start">
+                  {socialLinks.map(
+                    (social, index) => {
+                      const Icon = social.icon;
+
+                      return (
+                        <a
+                          key={social.label}
+                          ref={(el) => {
+                            socialRefs.current[index] =
+                              el;
+                          }}
+                          href={social.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onMouseEnter={() =>
+                            handleSocialEnter(index)
+                          }
+                          onMouseLeave={() =>
+                            handleSocialLeave(index)
+                          }
+                          className="group flex items-center gap-3 py-1.5 font-[doner] text-base text-white/70 transition-colors duration-300 hover:text-white sm:text-lg"
+                        >
+                          <Icon className="text-[12px] opacity-50" />
+
+                          <span>
+                            {social.label}
+                          </span>
+
+                          <span className="opacity-0 transition-opacity duration-300 group-hover:opacity-60">
+                            ↗
+                          </span>
+                        </a>
+                      );
+                    }
+                  )}
+                </div>
+              </div>
+
+              {/* RESUME */}
+
+              <button
+                ref={resumeRef}
+                type="button"
+                onClick={handleResume}
+                className="group inline-flex items-center gap-3 font-[doner] text-xs uppercase tracking-[0.2em] text-white/70 transition-colors duration-300 hover:text-white sm:text-sm"
+              >
+                <span>Resume</span>
+
+                <span className="transition-transform duration-400 group-hover:translate-x-1 group-hover:-translate-y-1">
+                  ↗
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </div>

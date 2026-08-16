@@ -5,7 +5,7 @@ import {
   FilesetResolver,
 } from "@mediapipe/tasks-vision";
 
-import heroImage from "../../../public/images/PNGs/herobg.png";
+import heroImage from "../../../public/images/PNGs/herobg1.png";
 
 const FACE_MODEL =
   "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite";
@@ -43,11 +43,9 @@ const Backdrop = () => {
     renderer.outputColorSpace =
       THREE.SRGBColorSpace;
 
-    renderer.setClearColor(0x000000, 1);
+    renderer.setClearColor(0x02030a, 1);
 
-    container.appendChild(
-      renderer.domElement
-    );
+    container.appendChild(renderer.domElement);
 
     // =========================================================
     // SCENE / CAMERA
@@ -81,8 +79,8 @@ const Backdrop = () => {
     const velocity =
       new THREE.Vector2(0, 0);
 
-    let previousMouseX = 0.5;
-    let previousMouseY = 0.5;
+    let previousX = 0.5;
+    let previousY = 0.5;
 
     const handlePointerMove = (event) => {
       const rect =
@@ -100,12 +98,12 @@ const Backdrop = () => {
       targetMouse.set(x, y);
 
       targetVelocity.set(
-        x - previousMouseX,
-        y - previousMouseY
+        x - previousX,
+        y - previousY
       );
 
-      previousMouseX = x;
-      previousMouseY = y;
+      previousX = x;
+      previousY = y;
     };
 
     window.addEventListener(
@@ -115,7 +113,7 @@ const Backdrop = () => {
     );
 
     // =========================================================
-    // TEXTURE
+    // IMAGE
     // =========================================================
 
     const textureLoader =
@@ -140,39 +138,20 @@ const Backdrop = () => {
       THREE.ClampToEdgeWrapping;
 
     // =========================================================
-    // FACE DETECTION DEFAULTS
-    //
-    // These are ONLY fallback values.
-    // If detection succeeds, they are replaced automatically.
-    //
-    // Coordinates are image UV:
-    // x = 0 left → 1 right
-    // y = 0 bottom → 1 top
+    // AUTO-DETECTED FACE
     // =========================================================
 
     const faceCenter =
-      new THREE.Vector2(
-        0.5,
-        0.68
-      );
+      new THREE.Vector2(0.5, 0.68);
 
     const faceSize =
-      new THREE.Vector2(
-        0.18,
-        0.22
-      );
+      new THREE.Vector2(0.16, 0.20);
 
     const bodyCenter =
-      new THREE.Vector2(
-        0.5,
-        0.42
-      );
+      new THREE.Vector2(0.5, 0.43);
 
     const bodySize =
-      new THREE.Vector2(
-        0.42,
-        0.52
-      );
+      new THREE.Vector2(0.38, 0.48);
 
     // =========================================================
     // SHADER
@@ -181,7 +160,6 @@ const Backdrop = () => {
     const material =
       new THREE.ShaderMaterial({
         uniforms: {
-
           uTexture: {
             value: texture,
           },
@@ -222,6 +200,16 @@ const Backdrop = () => {
               ),
           },
 
+          /*
+           * Main image scale.
+           *
+           * 1.0 = natural fit
+           * 0.82 = slightly smaller
+           */
+          uImageScale: {
+            value: 0.82,
+          },
+
           uFaceCenter: {
             value: faceCenter,
           },
@@ -243,7 +231,6 @@ const Backdrop = () => {
           varying vec2 vUv;
 
           void main() {
-
             vUv = uv;
 
             gl_Position =
@@ -260,6 +247,7 @@ const Backdrop = () => {
           uniform sampler2D uTexture;
 
           uniform float uTime;
+          uniform float uImageScale;
 
           uniform vec2 uMouse;
           uniform vec2 uVelocity;
@@ -277,11 +265,10 @@ const Backdrop = () => {
 
 
           // ===================================================
-          // NOISE
+          // HASH
           // ===================================================
 
           float hash(vec2 p) {
-
             return fract(
               sin(
                 dot(
@@ -291,80 +278,45 @@ const Backdrop = () => {
                     311.7
                   )
                 )
-              ) *
-              43758.5453123
+              ) * 43758.5453123
             );
           }
 
 
+          // ===================================================
+          // NOISE
+          // ===================================================
+
           float noise(vec2 p) {
+            vec2 i = floor(p);
+            vec2 f = fract(p);
 
-            vec2 i =
-              floor(p);
+            f = f * f * (3.0 - 2.0 * f);
 
-            vec2 f =
-              fract(p);
-
-            f =
-              f *
-              f *
-              (
-                3.0 -
-                2.0 *
-                f
-              );
-
-            float a =
-              hash(i);
-
-            float b =
-              hash(
-                i +
-                vec2(
-                  1.0,
-                  0.0
-                )
-              );
-
-            float c =
-              hash(
-                i +
-                vec2(
-                  0.0,
-                  1.0
-                )
-              );
-
-            float d =
-              hash(
-                i +
-                vec2(
-                  1.0,
-                  1.0
-                )
-              );
+            float a = hash(i);
+            float b = hash(i + vec2(1.0, 0.0));
+            float c = hash(i + vec2(0.0, 1.0));
+            float d = hash(i + vec2(1.0, 1.0));
 
             return mix(
-              mix(
-                a,
-                b,
-                f.x
-              ),
-              mix(
-                c,
-                d,
-                f.x
-              ),
+              mix(a, b, f.x),
+              mix(c, d, f.x),
               f.y
             );
           }
 
 
           // ===================================================
-          // COVER
+          // IMAGE FIT
+          //
+          // IMPORTANT:
+          // This does NOT use cover.
+          //
+          // It keeps the whole image visible and scales it
+          // down while preserving its aspect ratio.
           // ===================================================
 
-          vec2 coverUV(
+          vec2 fitImage(
             vec2 uv,
             vec2 viewport,
             vec2 image
@@ -387,28 +339,40 @@ const Backdrop = () => {
 
               scale =
                 vec2(
-                  1.0,
                   imageRatio /
-                  viewportRatio
+                  viewportRatio,
+                  1.0
                 );
 
             } else {
 
               scale =
                 vec2(
+                  1.0,
                   viewportRatio /
-                  imageRatio,
-                  1.0
+                  imageRatio
                 );
             }
 
-            return
-              (
-                uv -
-                0.5
-              ) *
+            /*
+             * Apply additional global scale.
+             *
+             * This is what prevents the portrait from
+             * becoming enormous and cutting the head.
+             */
+
+            scale *=
+              uImageScale;
+
+            vec2 centered =
+              uv - 0.5;
+
+            vec2 imageUv =
+              centered /
               scale +
               0.5;
+
+            return imageUv;
           }
 
 
@@ -435,7 +399,7 @@ const Backdrop = () => {
             return
               1.0 -
               smoothstep(
-                0.55,
+                0.45,
                 1.0,
                 d
               );
@@ -448,56 +412,70 @@ const Backdrop = () => {
 
           void main() {
 
-            // -----------------------------------------------
-            // ALWAYS CENTER THE IMAGE
-            // -----------------------------------------------
+            // -------------------------------------------------
+            // FULL IMAGE
+            // -------------------------------------------------
 
             vec2 uv =
-              coverUV(
+              fitImage(
                 vUv,
                 uResolution,
                 uImageResolution
               );
 
 
-            // -----------------------------------------------
-            // FACE MASK
-            // -----------------------------------------------
+            // -------------------------------------------------
+            // Outside image → clamp
+            //
+            // This avoids stretching/cropping artifacts.
+            // -------------------------------------------------
+
+            vec2 sampleUv =
+              clamp(
+                uv,
+                0.001,
+                0.999
+              );
+
+
+            // -------------------------------------------------
+            // FACE
+            // -------------------------------------------------
 
             float faceMask =
               ellipseMask(
-                uv,
+                sampleUv,
                 uFaceCenter,
                 uFaceSize
               );
 
 
-            // -----------------------------------------------
-            // UPPER BODY MASK
-            // -----------------------------------------------
+            // -------------------------------------------------
+            // UPPER BODY
+            // -------------------------------------------------
 
             float bodyMask =
               ellipseMask(
-                uv,
+                sampleUv,
                 uBodyCenter,
                 uBodySize
               );
 
 
-            // -----------------------------------------------
-            // COMBINED SUBJECT REGION
-            // -----------------------------------------------
+            // -------------------------------------------------
+            // SUBJECT
+            // -------------------------------------------------
 
             float subjectMask =
               max(
                 faceMask,
-                bodyMask * 0.82
+                bodyMask * 0.86
               );
 
 
-            // -----------------------------------------------
-            // MOUSE INFLUENCE
-            // -----------------------------------------------
+            // -------------------------------------------------
+            // MOUSE
+            // -------------------------------------------------
 
             float mouseDistance =
               distance(
@@ -509,14 +487,14 @@ const Backdrop = () => {
               1.0 -
               smoothstep(
                 0.0,
-                0.72,
+                0.70,
                 mouseDistance
               );
 
 
-            // -----------------------------------------------
+            // -------------------------------------------------
             // VELOCITY
-            // -----------------------------------------------
+            // -------------------------------------------------
 
             float speed =
               length(
@@ -525,26 +503,23 @@ const Backdrop = () => {
 
             float motion =
               smoothstep(
-                0.0005,
+                0.0004,
                 0.025,
                 speed
               );
 
 
-            // -----------------------------------------------
-            // ALWAYS-ACTIVE GLITCH
-            //
-            // This is the key:
-            // the face/body are NEVER perfectly clean.
-            // -----------------------------------------------
+            // -------------------------------------------------
+            // CONTINUOUS GLITCH
+            // -------------------------------------------------
 
             float row =
               floor(
-                uv.y *
+                sampleUv.y *
                 150.0
               );
 
-            float randomRow =
+            float rowRandom =
               hash(
                 vec2(
                   row,
@@ -555,58 +530,46 @@ const Backdrop = () => {
                 )
               );
 
-
             float activeStrip =
               step(
-                0.58,
-                randomRow
+                0.56,
+                rowRandom
               );
 
 
-            float glitchActivity =
-              mix(
-                0.45,
-                1.0,
-                activeStrip
-              );
+            // -------------------------------------------------
+            // PROCEDURAL MOVEMENT
+            // -------------------------------------------------
 
-
-            // -----------------------------------------------
-            // ORGANIC MOTION
-            // -----------------------------------------------
-
-            float n =
+            float n1 =
               noise(
-                uv *
-                5.0 +
+                sampleUv * 4.0 +
                 vec2(
                   uTime * 0.025,
-                  -uTime * 0.018
+                  -uTime * 0.016
                 )
               );
-
 
             float n2 =
               noise(
-                uv *
-                18.0 -
+                sampleUv * 15.0 -
                 vec2(
                   uTime * 0.04,
-                  uTime * 0.025
+                  uTime * 0.03
                 )
               );
 
 
-            // -----------------------------------------------
-            // HORIZONTAL DISPLACEMENT
-            // -----------------------------------------------
+            // -------------------------------------------------
+            // HORIZONTAL GLITCH
+            // -------------------------------------------------
 
             float horizontal =
               (
-                n -
+                n1 -
                 0.5
               ) *
-              0.012;
+              0.006;
 
 
             horizontal +=
@@ -615,111 +578,77 @@ const Backdrop = () => {
                 0.5
               ) *
               subjectMask *
-              glitchActivity *
-              0.028;
+              activeStrip *
+              0.036;
 
 
-            // -----------------------------------------------
-            // MOUSE-DRIVEN DISTORTION
-            // -----------------------------------------------
+            // -------------------------------------------------
+            // MOUSE IMPULSE
+            // -------------------------------------------------
 
             horizontal +=
               uVelocity.x *
               mouseInfluence *
               subjectMask *
-              0.48;
+              0.42;
 
 
             horizontal +=
               uVelocity.x *
               motion *
               subjectMask *
-              0.22;
+              0.18;
 
 
-            // -----------------------------------------------
-            // VERTICAL MICRO GLITCH
-            // -----------------------------------------------
+            // -------------------------------------------------
+            // SMALL VERTICAL SHIFT
+            // -------------------------------------------------
 
             float vertical =
               (
                 noise(
                   vec2(
-                    uv.x *
-                    70.0,
-                    uTime *
-                    7.0
+                    sampleUv.x * 80.0,
+                    uTime * 6.0
                   )
                 ) -
                 0.5
               ) *
               subjectMask *
-              0.012;
+              0.008;
 
 
-            // -----------------------------------------------
-            // APPLY DISPLACEMENT
-            // -----------------------------------------------
+            // -------------------------------------------------
+            // FINAL DISTORTION
+            // -------------------------------------------------
 
-            vec2 distortedUV =
-              uv;
+            vec2 distorted =
+              sampleUv;
 
-            distortedUV.x +=
+            distorted.x +=
               horizontal *
               subjectMask;
 
-            distortedUV.y +=
+            distorted.y +=
               vertical;
 
 
-            // -----------------------------------------------
-            // GLITCH SHARDS
-            //
-            // Slightly different samples create the broken /
-            // horizontally torn portrait feeling.
-            // -----------------------------------------------
-
-            float shard =
-              sin(
-                floor(
-                  uv.y *
-                  85.0
-                ) *
-                12.9898 +
-                uTime *
-                7.0
+            distorted =
+              clamp(
+                distorted,
+                0.001,
+                0.999
               );
 
 
-            float shardOffset =
-              (
-                fract(
-                  shard *
-                  43758.5453
-                ) -
-                0.5
-              ) *
-              subjectMask *
-              glitchActivity *
-              0.035;
+            // -------------------------------------------------
+            // RGB SPLIT
+            // -------------------------------------------------
 
-
-            vec2 shardUV =
-              distortedUV;
-
-            shardUV.x +=
-              shardOffset;
-
-
-            // -----------------------------------------------
-            // RGB CHANNEL SEPARATION
-            // -----------------------------------------------
-
-            float rgb =
+            float rgbShift =
               (
                 0.002 +
-                motion *
-                0.008
+                motion * 0.008
               ) *
               subjectMask;
 
@@ -727,27 +656,25 @@ const Backdrop = () => {
             float red =
               texture2D(
                 uTexture,
-                shardUV +
+                distorted +
                 vec2(
-                  rgb,
+                  rgbShift,
                   0.0
                 )
               ).r;
 
-
             float green =
               texture2D(
                 uTexture,
-                shardUV
+                distorted
               ).g;
-
 
             float blue =
               texture2D(
                 uTexture,
-                shardUV -
+                distorted -
                 vec2(
-                  rgb,
+                  rgbShift,
                   0.0
                 )
               ).b;
@@ -761,40 +688,41 @@ const Backdrop = () => {
               );
 
 
-            // -----------------------------------------------
-            // CLEAN IMAGE SAMPLE
-            // -----------------------------------------------
+            // -------------------------------------------------
+            // CLEAN IMAGE
+            // -------------------------------------------------
 
             vec3 cleanColor =
               texture2D(
                 uTexture,
-                uv
+                sampleUv
               ).rgb;
 
 
-            // -----------------------------------------------
-            // FACE MUST STAY DISTORTED
-            //
-            // Much stronger blend on the face than body.
-            // -----------------------------------------------
+            // -------------------------------------------------
+            // STRONG FACE GLITCH
+            // -------------------------------------------------
 
             float faceGlitch =
               clamp(
                 faceMask *
                 (
                   0.82 +
-                  motion *
-                  0.18
+                  motion * 0.18
                 ),
                 0.0,
                 1.0
               );
 
 
+            // -------------------------------------------------
+            // BODY GLITCH
+            // -------------------------------------------------
+
             float bodyGlitch =
               clamp(
                 bodyMask *
-                0.62,
+                0.58,
                 0.0,
                 1.0
               );
@@ -815,23 +743,20 @@ const Backdrop = () => {
               );
 
 
-            // -----------------------------------------------
-            // MAKE FACE MORE FRAGMENTED
-            // -----------------------------------------------
+            // -------------------------------------------------
+            // FRAGMENTATION
+            // -------------------------------------------------
 
             float fragmentNoise =
               noise(
-                uv *
-                45.0 +
-                uTime *
-                2.0
+                sampleUv * 46.0 +
+                uTime * 2.0
               );
-
 
             float fragmentation =
               smoothstep(
-                0.35,
-                0.72,
+                0.34,
+                0.74,
                 fragmentNoise
               ) *
               faceMask;
@@ -841,14 +766,13 @@ const Backdrop = () => {
               mix(
                 color,
                 glitchColor,
-                fragmentation *
-                0.42
+                fragmentation * 0.46
               );
 
 
-            // -----------------------------------------------
-            // LIFT IMAGE
-            // -----------------------------------------------
+            // -------------------------------------------------
+            // BRIGHTNESS
+            // -------------------------------------------------
 
             color =
               pow(
@@ -862,37 +786,35 @@ const Backdrop = () => {
               1.12;
 
 
-            // -----------------------------------------------
-            // BLUE ATMOSPHERE
-            // -----------------------------------------------
+            // -------------------------------------------------
+            // SUBTLE BLUE ATMOSPHERE
+            // -------------------------------------------------
 
             color +=
               vec3(
                 0.008,
-                0.015,
-                0.035
+                0.014,
+                0.032
               );
 
 
-            // -----------------------------------------------
-            // VERY LIGHT VIGNETTE
-            // -----------------------------------------------
+            // -------------------------------------------------
+            // MINIMAL VIGNETTE
+            // -------------------------------------------------
 
             float vignette =
               1.0 -
               smoothstep(
-                0.58,
-                0.92,
+                0.60,
+                0.94,
                 length(
-                  vUv -
-                  0.5
+                  vUv - 0.5
                 )
               );
 
-
             color *=
               mix(
-                0.97,
+                0.98,
                 1.0,
                 vignette
               );
@@ -983,9 +905,7 @@ const Backdrop = () => {
           }
         );
 
-        if (destroyed) {
-          return;
-        }
+        if (destroyed) return;
 
         const vision =
           await FilesetResolver.forVisionTasks(
@@ -1005,10 +925,10 @@ const Backdrop = () => {
                 "IMAGE",
 
               minDetectionConfidence:
-                0.35,
+                0.30,
 
               minSuppressionThreshold:
-                0.3,
+                0.30,
             }
           );
 
@@ -1018,29 +938,14 @@ const Backdrop = () => {
           );
 
         if (
-          !result ||
-          !result.detections ||
-          !result.detections.length
+          !result?.detections?.length
         ) {
           detector.close();
           return;
         }
 
-        /*
-         * Pick the largest / strongest face.
-         */
-
         const detection =
-          [...result.detections]
-            .sort(
-              (a, b) =>
-                (
-                  b.categories?.[0]?.score ?? 0
-                ) -
-                (
-                  a.categories?.[0]?.score ?? 0
-                )
-            )[0];
+          result.detections[0];
 
         const box =
           detection.boundingBox;
@@ -1050,21 +955,19 @@ const Backdrop = () => {
           return;
         }
 
-        /*
-         * MediaPipe bounding boxes use image coordinates:
-         * left/top are from the top-left of the source image.
-         *
-         * Convert to our UV:
-         * x: left -> right
-         * y: bottom -> top
-         */
+        const imageWidth =
+          image.naturalWidth;
 
+        const imageHeight =
+          image.naturalHeight;
+
+        // Image coordinates → UV
         const centerX =
           (
             box.originX +
             box.width * 0.5
           ) /
-          image.naturalWidth;
+          imageWidth;
 
         const centerY =
           1.0 -
@@ -1072,23 +975,17 @@ const Backdrop = () => {
             box.originY +
             box.height * 0.5
           ) /
-          image.naturalHeight;
+          imageHeight;
 
         const width =
           box.width /
-          image.naturalWidth;
+          imageWidth;
 
         const height =
           box.height /
-          image.naturalHeight;
+          imageHeight;
 
-        /*
-         * FACE
-         *
-         * Expand it slightly so the clean face is never
-         * sitting outside the glitch field.
-         */
-
+        // Face region
         faceCenter.set(
           centerX,
           centerY
@@ -1096,46 +993,35 @@ const Backdrop = () => {
 
         faceSize.set(
           Math.max(
-            width * 1.45,
-            0.12
+            width * 2.05,
+            0.16
           ),
           Math.max(
-            height * 1.55,
-            0.16
+            height * 2.35,
+            0.24
           )
         );
 
-        /*
-         * UPPER BODY
-         *
-         * Derived from the face position.
-         *
-         * Move downward because body is below face.
-         */
-
+        // Upper body derived from face
         bodyCenter.set(
           centerX,
           centerY -
             Math.max(
-              height * 1.55,
+              height * 1.65,
               0.20
             )
         );
 
         bodySize.set(
           Math.max(
-            width * 3.4,
-            0.34
+            width * 3.6,
+            0.36
           ),
           Math.max(
-            height * 4.2,
-            0.46
+            height * 4.5,
+            0.48
           )
         );
-
-        /*
-         * Smoothly update shader uniforms.
-         */
 
         material.uniforms
           .uFaceCenter
@@ -1166,10 +1052,9 @@ const Backdrop = () => {
           );
 
         detector.close();
-
       } catch (error) {
         console.warn(
-          "Hero face detection failed. Using fallback region.",
+          "Hero face detection failed. Falling back to default region.",
           error
         );
       }
@@ -1185,10 +1070,7 @@ const Backdrop = () => {
       new THREE.Clock();
 
     const animate = () => {
-
-      if (destroyed) {
-        return;
-      }
+      if (destroyed) return;
 
       animationFrame =
         requestAnimationFrame(
@@ -1200,7 +1082,6 @@ const Backdrop = () => {
         .value =
         clock.getElapsedTime();
 
-      // Smooth mouse
       mouse.lerp(
         targetMouse,
         0.055
@@ -1213,7 +1094,6 @@ const Backdrop = () => {
           mouse
         );
 
-      // Smooth velocity
       velocity.lerp(
         targetVelocity,
         0.10
@@ -1226,7 +1106,6 @@ const Backdrop = () => {
           velocity
         );
 
-      // Decay
       targetVelocity.multiplyScalar(
         0.82
       );

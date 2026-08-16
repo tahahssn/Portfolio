@@ -19,37 +19,44 @@ const HeroContent = () => {
 
     if (!root) return;
 
-    const statementLines =
-      statementRef.current?.querySelectorAll(
-        "[data-hero-line]"
-      );
+    const ctx = gsap.context(() => {
+      const statementLines =
+        statementRef.current?.querySelectorAll(
+          "[data-hero-line]"
+        );
 
-    let hasStarted = false;
+      if (!statementLines?.length) return;
 
-    const animateIn = () => {
-      if (hasStarted) return;
+      /*
+       * Initial state
+       */
+      gsap.set(statementLines, {
+        yPercent: 105,
+        opacity: 1,
+      });
 
-      hasStarted = true;
+      gsap.set(signatureRef.current, {
+        y: 18,
+        opacity: 0,
+      });
 
-      const ctx = gsap.context(() => {
-        gsap.set(statementLines, {
-          yPercent: 105,
-          opacity: 1,
-        });
+      gsap.set(ctaRef.current, {
+        y: 18,
+        opacity: 0,
+      });
 
-        gsap.set(signatureRef.current, {
-          y: 18,
-          opacity: 0,
-        });
+      let hasStarted = false;
 
-        gsap.set(ctaRef.current, {
-          y: 18,
-          opacity: 0,
-        });
+      const animateIn = () => {
+        if (hasStarted) return;
 
-        const timeline = gsap.timeline();
+        hasStarted = true;
 
-        timeline
+        gsap.timeline({
+          defaults: {
+            overwrite: "auto",
+          },
+        })
           .to(statementLines, {
             yPercent: 0,
             duration: 0.92,
@@ -76,58 +83,56 @@ const HeroContent = () => {
             },
             "-=0.38"
           );
-      }, root);
+      };
 
-      return ctx;
-    };
-
-    /*
-     * If your preloader dispatches this event, the hero starts
-     * at the exact end of the staircase reveal.
-     */
-    const handleReveal = () => {
-      const ctx = animateIn();
-
-      if (ctx) {
-        setTimeout(() => ctx.revert(), 2000);
-      }
-    };
-
-    window.addEventListener(
-      "hero-reveal-complete",
-      handleReveal
-    );
-
-    /*
-     * Development fallback:
-     * if the event doesn't exist for any reason, don't leave
-     * the hero permanently hidden.
-     */
-    const fallback = window.setTimeout(() => {
-      if (!hasStarted) {
+      const handleReveal = () => {
         animateIn();
-      }
-    }, 4500);
+      };
 
-    return () => {
-      window.removeEventListener(
+      window.addEventListener(
         "hero-reveal-complete",
         handleReveal
       );
 
-      window.clearTimeout(fallback);
+      /*
+       * Fallback
+       */
+      const fallback = window.setTimeout(() => {
+        animateIn();
+      }, 4500);
+
+      /*
+       * IMPORTANT:
+       * Once revealed, Hero stays in its final state.
+       * Nothing here reverts it after 2 seconds.
+       */
+
+      return () => {
+        window.removeEventListener(
+          "hero-reveal-complete",
+          handleReveal
+        );
+
+        window.clearTimeout(fallback);
+      };
+    }, root);
+
+    return () => {
+      ctx.revert();
     };
   }, []);
 
   return (
     <div
       ref={rootRef}
-      className="pointer-events-none absolute inset-0 z-20"
+      className="
+        pointer-events-none
+        absolute
+        inset-0
+        z-20
+      "
     >
-      {/* =====================================================
-          MAIN STATEMENT
-      ====================================================== */}
-
+      {/* MAIN STATEMENT */}
       <div
         ref={statementRef}
         className="
@@ -135,17 +140,13 @@ const HeroContent = () => {
           bottom-[15vh]
           left-[6vw]
           z-20
-
           w-[70vw]
           max-w-[1050px]
-
           max-xl:w-[72vw]
           max-lg:w-[78vw]
-
           max-md:bottom-[19vh]
           max-md:left-[5vw]
           max-md:w-[90vw]
-
           max-sm:bottom-[21vh]
           max-sm:left-[5vw]
           max-sm:w-[91vw]
@@ -154,10 +155,7 @@ const HeroContent = () => {
         <HeroStatement />
       </div>
 
-      {/* =====================================================
-          SIGNATURE
-      ====================================================== */}
-
+      {/* SIGNATURE */}
       <div
         ref={signatureRef}
         className="
@@ -165,7 +163,6 @@ const HeroContent = () => {
           bottom-[6.5vh]
           left-[6vw]
           z-20
-
           max-md:bottom-[8vh]
           max-md:left-[5vw]
           max-sm:bottom-[9vh]
@@ -174,10 +171,7 @@ const HeroContent = () => {
         <HeroSignature />
       </div>
 
-      {/* =====================================================
-          CTA
-      ====================================================== */}
-
+      {/* CTA */}
       <div
         ref={ctaRef}
         className="
@@ -185,10 +179,8 @@ const HeroContent = () => {
           bottom-[6.5vh]
           right-[6vw]
           z-20
-
           max-md:bottom-[8vh]
           max-md:right-[5vw]
-
           max-sm:bottom-[9vh]
           max-sm:right-[5vw]
         "

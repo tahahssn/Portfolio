@@ -57,13 +57,13 @@ const Navbar = () => {
   const menuItems = [
     {
       number: "01",
-      name: "WORK",
-      sectionId: "projects",
+      name: "ABOUT",
+      sectionId: "about",
     },
     {
       number: "02",
-      name: "ABOUT",
-      sectionId: "about",
+      name: "WORK",
+      sectionId: "projects",
     },
     {
       number: "03",

@@ -4,6 +4,7 @@ import Navbar from "./components/navigation/Navbar";
 import Footer from "./components/common/Footer";
 import Preloader from "./components/common/Preloader";
 
+import About from "./pages/About";
 import Hero from "./pages/Hero";
 import Projects from "./pages/Projects";
 
@@ -47,14 +48,12 @@ function App() {
 
   return (
     <>
-      {/* =========================================
-          WEBSITE
-      ========================================== */}
-
       <div className="min-h-screen">
         <Navbar />
 
         <main>
+          {/* HERO */}
+
           <section
             id="home"
             className="min-h-screen overflow-hidden"
@@ -62,12 +61,25 @@ function App() {
             <Hero />
           </section>
 
+          {/* ABOUT */}
+
+          <section
+            id="about"
+            className="relative min-h-screen overflow-visible"
+          >
+            <About />
+          </section>
+
+          {/* PROJECTS */}
+
           <section
             id="projects"
             className="min-h-screen overflow-hidden"
           >
             <Projects />
           </section>
+
+          {/* CONTACT */}
 
           <section
             id="contact"
@@ -77,10 +89,6 @@ function App() {
           </section>
         </main>
       </div>
-
-      {/* =========================================
-          PRELOADER + EXIT ANIMATION
-      ========================================== */}
 
       {isLoading && (
         <Preloader

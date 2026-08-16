@@ -4,10 +4,14 @@ import heroImage from "../../../public/images/PNGs/herobg1.png";
 
 const AboutInfo = () => {
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-[#080808]">
-      {/* RIGHT SIDE LABEL */}
+    <div className="relative h-screen w-full overflow-hidden bg-[#080808] text-[#F1F0EC]">
+      {/* =====================================================
+          RIGHT SIDE LABEL
+      ====================================================== */}
+
       <div
         data-about-info-side
+        data-about-vertical
         className="
           absolute
           right-[2.2vw]
@@ -20,7 +24,7 @@ const AboutInfo = () => {
         "
       >
         <div className="flex h-[72vh] items-center gap-4">
-          <div className="h-full w-px bg-white/10" />
+          <div className="h-full w-px bg-white/[0.10]" />
 
           <span
             className="
@@ -29,8 +33,8 @@ const AboutInfo = () => {
               font-[doner]
               text-[9px]
               uppercase
-              tracking-[0.22em]
-              text-white/45
+              tracking-[0.24em]
+              text-white/[0.42]
             "
           >
             About
@@ -38,7 +42,10 @@ const AboutInfo = () => {
         </div>
       </div>
 
-      {/* LEFT CONTENT */}
+      {/* =====================================================
+          LEFT CONTENT
+      ====================================================== */}
+
       <div
         className="
           relative
@@ -48,195 +55,210 @@ const AboutInfo = () => {
           w-full
           flex-col
           justify-center
+
           px-[6vw]
           py-[10vh]
+
           lg:w-[56%]
           lg:px-[5vw]
           lg:pr-[4vw]
         "
       >
-        {/* LABEL */}
+        {/* ===================================================
+            LABEL
+        ==================================================== */}
+
         <div
           data-about-info-label
-          className="mb-9 flex items-center gap-3"
+          data-about-label
+          className="
+            mb-8
+            flex
+            items-center
+            gap-3
+          "
         >
           <span
             className="
               font-[doner]
               text-[9px]
               tracking-[0.18em]
-              text-white/30
+              text-white/[0.32]
             "
           >
             01
           </span>
 
-          <span className="h-px w-7 bg-white/15" />
+          <span
+            className="
+              h-px
+              w-7
+              bg-red-500/[0.65]
+            "
+          />
 
           <span
             className="
               font-[doner]
               text-[9px]
               uppercase
-              tracking-[0.22em]
-              text-white/45
+              tracking-[0.24em]
+              text-white/[0.48]
             "
           >
             About
           </span>
         </div>
 
-        {/* TITLE */}
+        {/* ===================================================
+            MAIN STATEMENT
+        ==================================================== */}
+
         <div
           data-about-info-title
+          data-about-text
           className="
-            max-w-[900px]
+            max-w-[880px]
+
             font-[Arial]
             font-normal
-            text-[clamp(2rem,3.9vw,4.6rem)]
-            leading-[1.05]
-            tracking-[-0.045em]
-            text-white
+
+            text-[clamp(2.15rem,3.65vw,4.45rem)]
+            leading-[1.03]
+            tracking-[-0.048em]
+
+            text-[#F1F0EC]
           "
         >
-          I work between
-          <span className="mx-2 italic text-white/85">
-            intelligence
+          I build systems that{" "}
+          <span
+            className="
+              italic
+              text-[#D7D5CF]
+            "
+          >
+            think
+          </span>{" "}
+          and interfaces that{" "}
+          <span
+            className="
+              italic
+              text-[#D7D5CF]
+            "
+          >
+            move.
           </span>
-          and interaction —
-          building the systems underneath and the
-          experiences people actually touch.
         </div>
 
-        {/* DESCRIPTION */}
+        {/* ===================================================
+            SINGLE SUPPORTING PARAGRAPH
+        ==================================================== */}
+
         <p
           data-about-info-paragraph
+          data-about-description
           className="
-            mt-9
-            max-w-[590px]
+            mt-8
+            max-w-[600px]
+
             font-[doner]
             text-[11px]
             leading-[1.75]
-            tracking-[0.012em]
-            text-white/48
+            tracking-[0.01em]
+
+            text-white/[0.52]
+
             sm:text-xs
             md:text-[13px]
           "
         >
-          My work moves between AI and machine learning,
-          frontend development and interactive digital
-          experiences. I care about the relationship between
-          the logic underneath a product and the way it feels
-          when someone uses it.
+          From AI/ML and data to frontend and interaction,
+          I turn technical ideas into products that feel
+          clear, responsive, and deliberately made.
         </p>
 
-        {/* META */}
+        {/* ===================================================
+            HORIZONTAL META
+        ==================================================== */}
+
         <div
           data-about-info-meta
+          data-about-meta
           className="
-            mt-11
+            mt-10
+
             flex
-            flex-wrap
-            gap-x-12
-            gap-y-7
+            items-center
+            whitespace-nowrap
+            overflow-hidden
+
+            font-[doner]
+            text-[8px]
+            uppercase
+            tracking-[0.18em]
+            text-white/[0.42]
+
+            sm:text-[9px]
           "
         >
-          <div>
-            <span
-              className="
-                mb-2
-                block
-                font-[doner]
-                text-[8px]
-                uppercase
-                tracking-[0.2em]
-                text-white/25
-              "
-            >
-              Focus
-            </span>
+          <span
+            className="
+              transition-colors
+              duration-300
+              hover:text-white/[0.85]
+            "
+          >
+            INTELLIGENCE
+          </span>
 
-            <span
-              className="
-                font-[doner]
-                text-[10px]
-                leading-[1.75]
-                text-white/65
-              "
-            >
-              AI / ML
-              <br />
-              Frontend
-              <br />
-              Interactive Web
-            </span>
-          </div>
+          <span className="mx-4 h-3 w-px shrink-0 bg-red-500/[0.65]" />
 
-          <div>
-            <span
-              className="
-                mb-2
-                block
-                font-[doner]
-                text-[8px]
-                uppercase
-                tracking-[0.2em]
-                text-white/25
-              "
-            >
-              Approach
-            </span>
+          <span
+            className="
+              transition-colors
+              duration-300
+              hover:text-white/[0.85]
+            "
+          >
+            SYSTEMS
+          </span>
 
-            <span
-              className="
-                font-[doner]
-                text-[10px]
-                leading-[1.75]
-                text-white/65
-              "
-            >
-              Curious
-              <br />
-              Precise
-              <br />
-              Experimental
-            </span>
-          </div>
+          <span className="mx-4 h-3 w-px shrink-0 bg-red-500/[0.65]" />
 
-          <div>
-            <span
-              className="
-                mb-2
-                block
-                font-[doner]
-                text-[8px]
-                uppercase
-                tracking-[0.2em]
-                text-white/25
-              "
-            >
-              Based
-            </span>
+          <span
+            className="
+              transition-colors
+              duration-300
+              hover:text-white/[0.85]
+            "
+          >
+            KARACHI, PAKISTAN
+          </span>
 
-            <span
-              className="
-                font-[doner]
-                text-[10px]
-                leading-[1.75]
-                text-white/65
-              "
-            >
-              Karachi
-              <br />
-              Pakistan
-            </span>
-          </div>
+          <span className="mx-4 h-3 w-px shrink-0 bg-red-500/[0.65]" />
+
+          <span
+            className="
+              text-white/[0.62]
+              transition-colors
+              duration-300
+              hover:text-white/[0.9]
+            "
+          >
+            AVAILABLE WORLDWIDE
+          </span>
         </div>
       </div>
 
-      {/* RIGHT PORTRAIT */}
+      {/* =====================================================
+          RIGHT PORTRAIT
+          
+          DO NOT TOUCH THIS.
+      ====================================================== */}
+
       <div
         data-about-info-portrait
+        data-about-info-image
         className="
           absolute
           right-0
@@ -257,10 +279,12 @@ const AboutInfo = () => {
             w-full
             object-cover
             object-center
+
             opacity-90
             saturate-[0.9]
             contrast-[1.02]
             brightness-[0.92]
+
             will-change-transform
           "
         />

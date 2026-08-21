@@ -26,7 +26,6 @@ const Navbar = () => {
   const rightColumnRef = useRef(null);
   const emailBlockRef = useRef(null);
   const elsewhereBlockRef = useRef(null);
-  const resumeRef = useRef(null);
   const socialRefs = useRef([]);
 
   const timelineRef = useRef(null);
@@ -164,7 +163,6 @@ const Navbar = () => {
         [
           emailBlockRef.current,
           elsewhereBlockRef.current,
-          resumeRef.current,
         ],
         {
           y: 16,
@@ -318,21 +316,6 @@ const Navbar = () => {
         },
         0.74
       );
-
-      // ------------------------------------------------------
-      // 10 — RESUME
-      // ------------------------------------------------------
-
-      tl.to(
-        resumeRef.current,
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.42,
-          ease: "power3.out",
-        },
-        0.78
-      );
     }, navbarRef);
 
     return () => {
@@ -454,22 +437,6 @@ const Navbar = () => {
         behavior: "smooth",
       });
     }, 750);
-  };
-
-  // ==========================================================
-  // RESUME
-  // ==========================================================
-
-  const handleResume = () => {
-    const link =
-      document.createElement("a");
-
-    link.href = "/taha's_resume.pdf";
-    link.download = "taha's_resume.pdf";
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
   };
 
   // ==========================================================
@@ -797,21 +764,6 @@ const Navbar = () => {
                   )}
                 </div>
               </div>
-
-              {/* RESUME */}
-
-              <button
-                ref={resumeRef}
-                type="button"
-                onClick={handleResume}
-                className="group inline-flex items-center gap-3 font-[doner] text-xs uppercase tracking-[0.2em] text-white/70 transition-colors duration-300 hover:text-white sm:text-sm"
-              >
-                <span>Resume</span>
-
-                <span className="transition-transform duration-400 group-hover:translate-x-1 group-hover:-translate-y-1">
-                  ↗
-                </span>
-              </button>
             </div>
           </div>
         </div>

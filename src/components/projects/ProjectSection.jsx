@@ -1,9 +1,15 @@
-import WorkExploreSection from './WorkExploreSection'
+import React from "react";
 
-export default function App() {
+import ProjectIntro from "./ProjectIntro";
+import ProjectHorizontal from "./ProjectHorizontal";
+
+const ProjectSection = () => {
   return (
-    <div style={{ background: '#090909', minHeight: '100vh' }}>
-      <WorkExploreSection />
-    </div>
-  )
-}
+    <section className="relative w-full overflow-hidden bg-[#080808]">
+      <ProjectIntro />
+      <ProjectHorizontal />
+    </section>
+  );
+};
+
+export default ProjectSection;

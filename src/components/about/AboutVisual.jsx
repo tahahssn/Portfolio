@@ -1,6 +1,6 @@
 import React from "react";
 
-import heroImage from "../../../public/images/PNGs/herobg1.png";
+const heroImage = "/images/PNGs/herobg1.png";
 
 const AboutVisual = () => {
   return (

@@ -41,33 +41,6 @@ const projects = [
     href: "https://significo-clone.s3.eu-north-1.amazonaws.com/index.html",
   },
 
-  {
-    id: "04",
-    name: "GameNight",
-    category: "SERVER / GAME DEV",
-    year: "2025",
-
-    description:
-      "A custom multiplayer server project built around modding, systems and community play.",
-
-    image: "/images/projects/gamenight.webp",
-
-    href: "https://discord.gg/RPmARKDc6f",
-  },
-
-  {
-    id: "05",
-    name: "Tinder Web",
-    category: "FRONTEND / UI",
-    year: "2024",
-
-    description:
-      "A frontend experiment exploring the interaction model of a modern dating interface.",
-
-    image: "/images/projects/tinder-web.webp",
-
-    href: "https://github.com/tahahssn/Tinder-Web",
-  },
 ];
 
 export default projects;

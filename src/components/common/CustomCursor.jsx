@@ -463,6 +463,7 @@ const CustomCursor = () => {
         overflow-hidden
 
         bg-[#F1F0EC]
+        mix-blend-difference
 
         shadow-[0_4px_18px_rgba(0,0,0,0.08)]
 

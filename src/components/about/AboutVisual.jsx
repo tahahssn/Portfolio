@@ -1,14 +1,193 @@
-import React from "react";
+import React, {
+  useLayoutEffect,
+  useRef,
+} from "react";
+
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const heroImage = "/images/PNGs/herobg1.png";
 
 const AboutVisual = () => {
+  const sectionRef = useRef(null);
+
+  const labelRef = useRef(null);
+  const statementRef = useRef(null);
+  const statementWordsRef = useRef([]);
+  const hintRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const section = sectionRef.current;
+
+    if (!section) return;
+
+    const ctx = gsap.context(() => {
+      const mm = gsap.matchMedia();
+
+      /*
+       * ==========================================================
+       * REDUCED MOTION
+       * ==========================================================
+       */
+
+      mm.add(
+        "(prefers-reduced-motion: reduce)",
+        () => {
+          gsap.set(
+            [
+              labelRef.current,
+              ...statementWordsRef.current,
+              hintRef.current,
+            ],
+            {
+              opacity: 1,
+              y: 0,
+              filter: "blur(0px)",
+            }
+          );
+        }
+      );
+
+      /*
+       * ==========================================================
+       * NORMAL MOTION
+       * ==========================================================
+       */
+
+      mm.add(
+        "(prefers-reduced-motion: no-preference)",
+        () => {
+          const resetAbout = () => {
+            gsap.set(labelRef.current, {
+              opacity: 0,
+              y: 14,
+            });
+
+            gsap.set(statementWordsRef.current, {
+              opacity: 0,
+              y: 28,
+              filter: "blur(8px)",
+            });
+
+            gsap.set(hintRef.current, {
+              opacity: 0,
+              y: 14,
+            });
+          };
+
+          /*
+           * Initial state.
+           * Nothing automatically plays on page load.
+           */
+
+          resetAbout();
+
+          /*
+           * ======================================================
+           * ABOUT REVEAL TIMELINE
+           * ======================================================
+           */
+
+          const aboutTimeline = gsap.timeline({
+            paused: true,
+          });
+
+          aboutTimeline
+            .to(labelRef.current, {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              ease: "power3.out",
+            })
+            .to(
+              statementWordsRef.current,
+              {
+                opacity: 1,
+                y: 0,
+                filter: "blur(0px)",
+                duration: 0.95,
+                stagger: 0.1,
+                ease: "power4.out",
+              },
+              "-=0.32"
+            )
+            .to(
+              hintRef.current,
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                ease: "power3.out",
+              },
+              "-=0.42"
+            );
+
+          /*
+           * ======================================================
+           * SCROLLTRIGGER
+           *
+           * Scroll down:
+           *   About enters -> animation plays
+           *
+           * Scroll back above:
+           *   animation resets
+           *
+           * Scroll down again:
+           *   animation plays again
+           * ======================================================
+           */
+
+          ScrollTrigger.create({
+            trigger: section,
+            start: "top 72%",
+            end: "bottom top",
+
+            onEnter: () => {
+              aboutTimeline.restart();
+            },
+
+            onEnterBack: () => {
+              aboutTimeline.restart();
+            },
+
+            onLeaveBack: () => {
+              aboutTimeline.pause(0);
+              resetAbout();
+            },
+          });
+        }
+      );
+
+      return () => mm.revert();
+    }, section);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-black">
-      {/* IMAGE */}
+    <div
+      ref={sectionRef}
+      className="
+        relative
+        h-screen
+        w-full
+        overflow-hidden
+        bg-black
+      "
+    >
+      {/* ==========================================================
+          IMAGE
+          ========================================================== */}
+
       <div
         data-about-visual-image
-        className="absolute inset-0 overflow-hidden"
+        className="
+          absolute
+          inset-0
+          overflow-hidden
+        "
       >
         <img
           src={heroImage}
@@ -26,7 +205,13 @@ const AboutVisual = () => {
           "
         />
 
-        <div className="absolute inset-0 bg-black/25" />
+        <div
+          className="
+            absolute
+            inset-0
+            bg-black/25
+          "
+        />
 
         <div
           className="
@@ -40,7 +225,10 @@ const AboutVisual = () => {
         />
       </div>
 
-      {/* RED ATMOSPHERE */}
+      {/* ==========================================================
+          RED ATMOSPHERE
+          ========================================================== */}
+
       <div
         className="
           pointer-events-none
@@ -57,8 +245,12 @@ const AboutVisual = () => {
         "
       />
 
-      {/* LABEL */}
+      {/* ==========================================================
+          LABEL
+          ========================================================== */}
+
       <div
+        ref={labelRef}
         data-about-visual-label
         className="
           absolute
@@ -79,7 +271,13 @@ const AboutVisual = () => {
             01
           </span>
 
-          <span className="h-px w-7 bg-white/20" />
+          <span
+            className="
+              h-px
+              w-7
+              bg-white/20
+            "
+          />
 
           <span
             className="
@@ -95,8 +293,12 @@ const AboutVisual = () => {
         </div>
       </div>
 
-      {/* STATEMENT */}
+      {/* ==========================================================
+          STATEMENT
+          ========================================================== */}
+
       <div
+        ref={statementRef}
         data-about-visual-statement
         className="
           absolute
@@ -120,15 +322,47 @@ const AboutVisual = () => {
             text-white/90
           "
         >
-          I make complex things
-          <span className="mx-2 italic text-white">
+          <span
+            ref={(el) => {
+              statementWordsRef.current[0] = el;
+            }}
+          >
+            I make
+          </span>{" "}
+
+          <span
+            ref={(el) => {
+              statementWordsRef.current[1] = el;
+            }}
+          >
+            complex
+          </span>{" "}
+
+          <span
+            ref={(el) => {
+              statementWordsRef.current[2] = el;
+            }}
+          >
+            things
+          </span>{" "}
+
+          <span
+            ref={(el) => {
+              statementWordsRef.current[3] = el;
+            }}
+            className="italic text-white"
+          >
             feel simple.
           </span>
         </p>
       </div>
 
-      {/* HINT */}
+      {/* ==========================================================
+          HINT
+          ========================================================== */}
+
       <div
+        ref={hintRef}
         data-about-visual-hint
         className="
           absolute
@@ -139,7 +373,13 @@ const AboutVisual = () => {
         "
       >
         <div className="flex items-center gap-3">
-          <span className="h-px w-7 bg-white/20" />
+          <span
+            className="
+              h-px
+              w-7
+              bg-white/20
+            "
+          />
 
           <span
             className="
@@ -153,7 +393,13 @@ const AboutVisual = () => {
             Keep scrolling
           </span>
 
-          <span className="h-px w-7 bg-white/20" />
+          <span
+            className="
+              h-px
+              w-7
+              bg-white/20
+            "
+          />
         </div>
       </div>
     </div>

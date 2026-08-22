@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Navbar from "./components/navigation/Navbar";
 import Footer from "./components/common/Footer";
 import Preloader from "./components/common/Preloader";
+import CustomCursor from "./components/common/CustomCursor";
 
 import About from "./pages/About";
 import Hero from "./pages/Hero";
@@ -48,6 +49,7 @@ function App() {
 
   return (
     <>
+      <CustomCursor />
       <div className="min-h-screen">
         <Navbar />
 

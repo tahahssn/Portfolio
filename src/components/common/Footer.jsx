@@ -29,9 +29,9 @@ const Footer = () => {
   const footerRef = useRef(null);
 
   /*
-   * --------------------------------------------------------------
-   * STATEMENT
-   * --------------------------------------------------------------
+   * ============================================================
+   * CLOSING STATEMENT
+   * ============================================================
    */
 
   const statementSectionRef = useRef(null);
@@ -41,31 +41,29 @@ const Footer = () => {
   const connectStatementRef = useRef(null);
 
   /*
-   * --------------------------------------------------------------
+   * ============================================================
    * ACTUAL FOOTER
-   * --------------------------------------------------------------
+   * ============================================================
    */
 
-  const footerContentTriggerRef = useRef(null);
   const footerContentRef = useRef(null);
-
   const pagesRef = useRef(null);
   const connectRef = useRef(null);
   const socialsRef = useRef(null);
   const bottomRef = useRef(null);
 
   /*
-   * --------------------------------------------------------------
+   * ============================================================
    * BACK TO TOP
-   * --------------------------------------------------------------
+   * ============================================================
    */
 
   const backTopRef = useRef(null);
 
   /*
-   * --------------------------------------------------------------
+   * ============================================================
    * SMOOTH SCROLL
-   * --------------------------------------------------------------
+   * ============================================================
    */
 
   const smoothScrollTo = (target) => {
@@ -94,9 +92,9 @@ const Footer = () => {
   };
 
   /*
-   * --------------------------------------------------------------
-   * FOOTER ANIMATION
-   * --------------------------------------------------------------
+   * ============================================================
+   * SCROLL ANIMATION
+   * ============================================================
    */
 
   useLayoutEffect(() => {
@@ -105,336 +103,280 @@ const Footer = () => {
     if (!footer) return;
 
     const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
+      const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
 
       /*
-       * ==========================================================
+       * ========================================================
        * REDUCED MOTION
-       * ==========================================================
+       * ========================================================
        */
 
-      mm.add(
-        "(prefers-reduced-motion: reduce)",
-        () => {
+      if (reducedMotion) {
+        gsap.set(
+          [
+            ...statementWordsRef.current,
+            statusRef.current,
+            connectStatementRef.current,
+            pagesRef.current,
+            connectRef.current,
+            socialsRef.current,
+            bottomRef.current,
+          ],
+          {
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",
+          }
+        );
+
+        return;
+      }
+
+      /*
+       * ========================================================
+       * INITIAL STATES
+       *
+       * IMPORTANT:
+       *
+       * We DO NOT hide footerContentRef.
+       * Therefore the footer can NEVER disappear because of
+       * a missed ScrollTrigger event.
+       * ========================================================
+       */
+
+      gsap.set(statementWordsRef.current, {
+        opacity: 0,
+        y: 28,
+        filter: "blur(8px)",
+      });
+
+      gsap.set(statusRef.current, {
+        opacity: 0,
+        y: 14,
+      });
+
+      gsap.set(connectStatementRef.current, {
+        opacity: 0,
+        y: 18,
+      });
+
+      gsap.set(
+        [
+          pagesRef.current,
+          connectRef.current,
+          socialsRef.current,
+        ],
+        {
+          opacity: 0,
+          y: 18,
+        }
+      );
+
+      gsap.set(bottomRef.current, {
+        opacity: 0,
+        y: 14,
+      });
+
+      /*
+       * ========================================================
+       * STATEMENT TIMELINE
+       * ========================================================
+       */
+
+      const statementTimeline = gsap.timeline({
+        paused: true,
+      });
+
+      statementTimeline
+        .to(statementWordsRef.current, {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 0.95,
+          stagger: 0.1,
+          ease: "power4.out",
+        })
+        .to(
+          statusRef.current,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: "power3.out",
+          },
+          "-=0.58"
+        )
+        .to(
+          connectStatementRef.current,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.65,
+            ease: "power3.out",
+          },
+          "-=0.36"
+        );
+
+      /*
+       * ========================================================
+       * STATEMENT TRIGGER
+       * ========================================================
+       */
+
+      ScrollTrigger.create({
+        trigger: statementSectionRef.current,
+        start: "top 72%",
+        end: "bottom top",
+
+        onEnter: () => {
+          statementTimeline.restart();
+        },
+
+        onEnterBack: () => {
+          statementTimeline.restart();
+        },
+
+        onLeaveBack: () => {
+          statementTimeline.pause(0);
+
+          gsap.set(statementWordsRef.current, {
+            opacity: 0,
+            y: 28,
+            filter: "blur(8px)",
+          });
+
+          gsap.set(statusRef.current, {
+            opacity: 0,
+            y: 14,
+          });
+
+          gsap.set(connectStatementRef.current, {
+            opacity: 0,
+            y: 18,
+          });
+        },
+      });
+
+      /*
+       * ========================================================
+       * FOOTER CONTENT TIMELINE
+       * ========================================================
+       */
+
+      const contentTimeline = gsap.timeline({
+        paused: true,
+      });
+
+      contentTimeline
+        .to(
+          [
+            pagesRef.current,
+            connectRef.current,
+          ],
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.62,
+            stagger: 0.08,
+            ease: "power3.out",
+          }
+        )
+        .to(
+          socialsRef.current,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.58,
+            ease: "power3.out",
+          },
+          "-=0.34"
+        )
+        .to(
+          bottomRef.current,
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.56,
+            ease: "power3.out",
+          },
+          "-=0.3"
+        );
+
+      /*
+       * ========================================================
+       * FOOTER CONTENT TRIGGER
+       *
+       * The trigger is the footer content section itself,
+       * BUT only its children are hidden.
+       * ========================================================
+       */
+
+      ScrollTrigger.create({
+        trigger: footerContentRef.current,
+        start: "top 88%",
+        end: "bottom top",
+
+        onEnter: () => {
+          contentTimeline.restart();
+        },
+
+        onEnterBack: () => {
+          contentTimeline.restart();
+        },
+
+        onLeaveBack: () => {
+          contentTimeline.pause(0);
+
           gsap.set(
             [
-              ...statementWordsRef.current,
-              statusRef.current,
-              connectStatementRef.current,
-              footerContentRef.current,
               pagesRef.current,
               connectRef.current,
               socialsRef.current,
-              bottomRef.current,
             ],
             {
-              opacity: 1,
-              y: 0,
-              filter: "blur(0px)",
-            }
-          );
-        }
-      );
-
-      /*
-       * ==========================================================
-       * NORMAL MOTION
-       * ==========================================================
-       */
-
-      mm.add(
-        "(prefers-reduced-motion: no-preference)",
-        () => {
-          /*
-           * --------------------------------------------------------
-           * RESET STATEMENT
-           * --------------------------------------------------------
-           */
-
-          const resetStatement = () => {
-            gsap.set(statementWordsRef.current, {
-              opacity: 0,
-              y: 28,
-              filter: "blur(8px)",
-            });
-
-            gsap.set(statusRef.current, {
-              opacity: 0,
-              y: 14,
-            });
-
-            gsap.set(connectStatementRef.current, {
               opacity: 0,
               y: 18,
-            });
-          };
+            }
+          );
 
-          /*
-           * --------------------------------------------------------
-           * RESET FOOTER CONTENT
-           * --------------------------------------------------------
-           */
-
-          const resetFooterContent = () => {
-            gsap.set(footerContentRef.current, {
-              opacity: 0,
-              y: 24,
-            });
-
-            gsap.set(
-              [
-                pagesRef.current,
-                connectRef.current,
-                socialsRef.current,
-              ],
-              {
-                opacity: 0,
-                y: 18,
-              }
-            );
-
-            gsap.set(bottomRef.current, {
-              opacity: 0,
-              y: 14,
-            });
-          };
-
-          /*
-           * --------------------------------------------------------
-           * INITIAL STATE
-           * --------------------------------------------------------
-           */
-
-          resetStatement();
-          resetFooterContent();
-
-          /*
-           * ========================================================
-           * STATEMENT TIMELINE
-           * ========================================================
-           */
-
-          const statementTimeline = gsap.timeline({
-            paused: true,
+          gsap.set(bottomRef.current, {
+            opacity: 0,
+            y: 14,
           });
+        },
+      });
 
-          statementTimeline
-            .to(statementWordsRef.current, {
-              opacity: 1,
-              y: 0,
-              filter: "blur(0px)",
-              duration: 0.95,
-              stagger: 0.1,
-              ease: "power4.out",
-            })
-            .to(
-              statusRef.current,
-              {
-                opacity: 1,
-                y: 0,
-                duration: 0.6,
-                ease: "power3.out",
-              },
-              "-=0.58"
-            )
-            .to(
-              connectStatementRef.current,
-              {
-                opacity: 1,
-                y: 0,
-                duration: 0.65,
-                ease: "power3.out",
-              },
-              "-=0.36"
-            );
+      /*
+       * ========================================================
+       * STATEMENT PARALLAX
+       * ========================================================
+       */
 
-          /*
-           * ========================================================
-           * STATEMENT SCROLLTRIGGER
-           * ========================================================
-           */
-
-          const statementTrigger =
-            ScrollTrigger.create({
-              trigger:
-                statementSectionRef.current,
-
-              start: "top 72%",
-              end: "bottom top",
-
-              onEnter: () => {
-                statementTimeline.restart();
-              },
-
-              onEnterBack: () => {
-                statementTimeline.restart();
-              },
-
-              onLeaveBack: () => {
-                statementTimeline.pause(0);
-                resetStatement();
-              },
-
-              onRefresh: (self) => {
-                if (self.isActive) {
-                  statementTimeline.restart();
-                } else if (self.progress === 0) {
-                  resetStatement();
-                }
-              },
-            });
-
-          /*
-           * ========================================================
-           * FOOTER CONTENT TIMELINE
-           * ========================================================
-           */
-
-          const contentTimeline =
-            gsap.timeline({
-              paused: true,
-            });
-
-          contentTimeline
-            .to(footerContentRef.current, {
-              opacity: 1,
-              y: 0,
-              duration: 0.7,
-              ease: "power3.out",
-            })
-            .to(
-              [
-                pagesRef.current,
-                connectRef.current,
-              ],
-              {
-                opacity: 1,
-                y: 0,
-                duration: 0.62,
-                stagger: 0.08,
-                ease: "power3.out",
-              },
-              "-=0.42"
-            )
-            .to(
-              socialsRef.current,
-              {
-                opacity: 1,
-                y: 0,
-                duration: 0.58,
-                ease: "power3.out",
-              },
-              "-=0.34"
-            )
-            .to(
-              bottomRef.current,
-              {
-                opacity: 1,
-                y: 0,
-                duration: 0.56,
-                ease: "power3.out",
-              },
-              "-=0.3"
-            );
-
-          /*
-           * ========================================================
-           * FOOTER CONTENT SCROLLTRIGGER
-           *
-           * IMPORTANT:
-           * Trigger uses an ALWAYS-VISIBLE wrapper.
-           * Animated content is separate.
-           * ========================================================
-           */
-
-          const contentTrigger =
-            ScrollTrigger.create({
-              trigger:
-                footerContentTriggerRef.current,
-
-              start: "top 88%",
-              end: "bottom top",
-
-              onEnter: () => {
-                contentTimeline.restart();
-              },
-
-              onEnterBack: () => {
-                contentTimeline.restart();
-              },
-
-              onLeaveBack: () => {
-                contentTimeline.pause(0);
-                resetFooterContent();
-              },
-
-              onRefresh: (self) => {
-                if (self.isActive) {
-                  contentTimeline.restart();
-                } else if (self.progress === 0) {
-                  resetFooterContent();
-                }
-              },
-            });
-
-          /*
-           * ========================================================
-           * SUBTLE STATEMENT PARALLAX
-           * ========================================================
-           */
-
-          let statementParallax = null;
-
-          if (window.innerWidth >= 1024) {
-            statementParallax = gsap.to(
-              statementRef.current,
-              {
-                yPercent: -4,
-                ease: "none",
-
-                scrollTrigger: {
-                  trigger:
-                    statementSectionRef.current,
-
-                  start: "top bottom",
-                  end: "bottom top",
-
-                  scrub: 1.8,
-                },
-              }
-            );
-          }
-
-          /*
-           * --------------------------------------------------------
-           * REFRESH AFTER LAYOUT
-           * --------------------------------------------------------
-           */
-
-          requestAnimationFrame(() => {
-            ScrollTrigger.refresh();
-          });
-
-          /*
-           * Keep references alive for cleanup/debugging.
-           */
-
-          void statementTrigger;
-          void contentTrigger;
-          void statementParallax;
-        }
-      );
-
-      return () => mm.revert();
+      if (window.innerWidth >= 1024) {
+        gsap.to(statementRef.current, {
+          yPercent: -4,
+          ease: "none",
+          scrollTrigger: {
+            trigger: statementSectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1.8,
+          },
+        });
+      }
     }, footer);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+    };
   }, []);
 
   /*
-   * --------------------------------------------------------------
+   * ============================================================
    * LINK HOVER
-   * --------------------------------------------------------------
+   * ============================================================
    */
 
   const handleLinkEnter = (event) => {
@@ -474,9 +416,9 @@ const Footer = () => {
   };
 
   /*
-   * --------------------------------------------------------------
+   * ============================================================
    * BACK TO TOP
-   * --------------------------------------------------------------
+   * ============================================================
    */
 
   const handleBackTopEnter = () => {
@@ -652,7 +594,8 @@ const Footer = () => {
           >
             <span
               ref={(el) => {
-                statementWordsRef.current[0] = el;
+                statementWordsRef.current[0] =
+                  el;
               }}
             >
               Until
@@ -660,7 +603,8 @@ const Footer = () => {
 
             <span
               ref={(el) => {
-                statementWordsRef.current[1] = el;
+                statementWordsRef.current[1] =
+                  el;
               }}
             >
               the
@@ -668,7 +612,8 @@ const Footer = () => {
 
             <span
               ref={(el) => {
-                statementWordsRef.current[2] = el;
+                statementWordsRef.current[2] =
+                  el;
               }}
               className="
                 italic
@@ -680,7 +625,8 @@ const Footer = () => {
 
             <span
               ref={(el) => {
-                statementWordsRef.current[3] = el;
+                statementWordsRef.current[3] =
+                  el;
               }}
             >
               one.
@@ -797,93 +743,247 @@ const Footer = () => {
           ACTUAL FOOTER
           ========================================================== */}
 
-      {/*
-       * IMPORTANT:
-       * This wrapper is ALWAYS visible and is used only as the
-       * ScrollTrigger target.
-       */}
-
       <div
-        ref={footerContentTriggerRef}
+        ref={footerContentRef}
         className="
           relative
           z-10
+          mx-auto
           w-full
+          max-w-[1800px]
+          px-5
+          pb-5
+          sm:px-8
+          sm:pb-7
+          md:px-12
+          lg:px-16
+          xl:px-20
         "
       >
+        {/* DIVIDER — ALWAYS VISIBLE */}
+
         <div
-          ref={footerContentRef}
           className="
-            relative
-            mx-auto
+            h-px
             w-full
-            max-w-[1800px]
-            px-5
-            pb-5
-            sm:px-8
-            sm:pb-7
-            md:px-12
-            lg:px-16
-            xl:px-20
+            bg-[#F1F0EC]/10
+          "
+        />
+
+        {/* MAIN FOOTER ROW */}
+
+        <div
+          className="
+            grid
+            grid-cols-1
+            gap-12
+            py-10
+            sm:grid-cols-2
+            lg:grid-cols-[0.7fr_0.7fr_1fr]
+            lg:gap-10
+            lg:py-12
           "
         >
-          {/* DIVIDER */}
+          {/* PAGES */}
 
-          <div
-            className="
-              h-px
-              w-full
-              bg-[#F1F0EC]/10
-            "
-          />
+          <div ref={pagesRef}>
+            <span
+              className="
+                mb-5
+                block
+                font-[doner]
+                text-[8px]
+                uppercase
+                tracking-[0.22em]
+                text-[#F1F0EC]/22
+              "
+            >
+              Pages
+            </span>
 
-          {/* MAIN FOOTER ROW */}
+            <div
+              className="
+                flex
+                flex-col
+                items-start
+              "
+            >
+              {PAGE_LINKS.map((item) => (
+                <button
+                  key={item.label}
+                  type="button"
+                  onClick={() =>
+                    smoothScrollTo(
+                      item.target
+                    )
+                  }
+                  onMouseEnter={
+                    handleLinkEnter
+                  }
+                  onMouseLeave={
+                    handleLinkLeave
+                  }
+                  className="
+                    group
+                    relative
+                    flex
+                    cursor-pointer
+                    items-center
+                    gap-2
+                    py-1
+                    font-[doner]
+                    text-sm
+                    tracking-wide
+                    text-[#F1F0EC]/58
+                    outline-none
+                    transition-colors
+                    duration-300
+                    hover:text-[#F1F0EC]
+                    focus-visible:text-[#F1F0EC]
+                    sm:text-[15px]
+                  "
+                >
+                  <span>
+                    {item.label}
+                  </span>
 
-          <div
-            className="
-              grid
-              grid-cols-1
-              gap-12
-              py-10
-              sm:grid-cols-2
-              lg:grid-cols-[0.7fr_0.7fr_1fr]
-              lg:gap-10
-              lg:py-12
-            "
-          >
-            {/* PAGES */}
+                  <span
+                    className="
+                      footer-arrow
+                      text-[9px]
+                      text-red-500
+                      opacity-0
+                    "
+                  >
+                    ↗
+                  </span>
 
-            <div ref={pagesRef}>
-              <span
-                className="
-                  mb-5
-                  block
-                  font-[doner]
-                  text-[8px]
-                  uppercase
-                  tracking-[0.22em]
-                  text-[#F1F0EC]/22
-                "
-              >
-                Pages
+                  <span
+                    className="
+                      absolute
+                      bottom-0
+                      left-0
+                      h-px
+                      w-full
+                      origin-left
+                      scale-x-0
+                      bg-[#F1F0EC]/50
+                      transition-transform
+                      duration-500
+                      group-hover:scale-x-100
+                    "
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* CONNECT */}
+
+          <div ref={connectRef}>
+            <span
+              className="
+                mb-5
+                block
+                font-[doner]
+                text-[8px]
+                uppercase
+                tracking-[0.22em]
+                text-[#F1F0EC]/22
+              "
+            >
+              Connect
+            </span>
+
+            <a
+              href="mailto:tahahassan699@gmail.com?subject=Project%20Inquiry"
+              onMouseEnter={
+                handleLinkEnter
+              }
+              onMouseLeave={
+                handleLinkLeave
+              }
+              className="
+                group
+                relative
+                inline-flex
+                items-center
+                gap-2
+                font-[doner]
+                text-sm
+                tracking-wide
+                text-[#F1F0EC]/65
+                transition-colors
+                duration-300
+                hover:text-[#F1F0EC]
+                sm:text-[15px]
+              "
+            >
+              <span>
+                Get in touch
               </span>
 
-              <div
+              <span
                 className="
-                  flex
-                  flex-col
-                  items-start
+                  footer-arrow
+                  text-[9px]
+                  text-red-500
+                  opacity-0
                 "
               >
-                {PAGE_LINKS.map((item) => (
-                  <button
+                ↗
+              </span>
+
+              <span
+                className="
+                  absolute
+                  -bottom-1
+                  left-0
+                  h-px
+                  w-full
+                  origin-left
+                  scale-x-0
+                  bg-red-500/80
+                  transition-transform
+                  duration-500
+                  group-hover:scale-x-100
+                "
+              />
+            </a>
+          </div>
+
+          {/* ELSEWHERE */}
+
+          <div ref={socialsRef}>
+            <span
+              className="
+                mb-5
+                block
+                font-[doner]
+                text-[8px]
+                uppercase
+                tracking-[0.22em]
+                text-[#F1F0EC]/22
+              "
+            >
+              Elsewhere
+            </span>
+
+            <div
+              className="
+                flex
+                flex-wrap
+                gap-x-6
+                gap-y-2
+              "
+            >
+              {SOCIAL_LINKS.map(
+                (item) => (
+                  <a
                     key={item.label}
-                    type="button"
-                    onClick={() =>
-                      smoothScrollTo(
-                        item.target
-                      )
-                    }
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     onMouseEnter={
                       handleLinkEnter
                     }
@@ -894,19 +994,16 @@ const Footer = () => {
                       group
                       relative
                       flex
-                      cursor-pointer
                       items-center
                       gap-2
                       py-1
                       font-[doner]
                       text-sm
                       tracking-wide
-                      text-[#F1F0EC]/58
-                      outline-none
+                      text-[#F1F0EC]/55
                       transition-colors
                       duration-300
                       hover:text-[#F1F0EC]
-                      focus-visible:text-[#F1F0EC]
                       sm:text-[15px]
                     "
                   >
@@ -940,305 +1037,134 @@ const Footer = () => {
                         group-hover:scale-x-100
                       "
                     />
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* CONNECT */}
-
-            <div ref={connectRef}>
-              <span
-                className="
-                  mb-5
-                  block
-                  font-[doner]
-                  text-[8px]
-                  uppercase
-                  tracking-[0.22em]
-                  text-[#F1F0EC]/22
-                "
-              >
-                Connect
-              </span>
-
-              <a
-                href="mailto:tahahassan699@gmail.com?subject=Project%20Inquiry"
-                onMouseEnter={
-                  handleLinkEnter
-                }
-                onMouseLeave={
-                  handleLinkLeave
-                }
-                className="
-                  group
-                  relative
-                  inline-flex
-                  items-center
-                  gap-2
-                  font-[doner]
-                  text-sm
-                  tracking-wide
-                  text-[#F1F0EC]/65
-                  transition-colors
-                  duration-300
-                  hover:text-[#F1F0EC]
-                  sm:text-[15px]
-                "
-              >
-                <span>
-                  Get in touch
-                </span>
-
-                <span
-                  className="
-                    footer-arrow
-                    text-[9px]
-                    text-red-500
-                    opacity-0
-                  "
-                >
-                  ↗
-                </span>
-
-                <span
-                  className="
-                    absolute
-                    -bottom-1
-                    left-0
-                    h-px
-                    w-full
-                    origin-left
-                    scale-x-0
-                    bg-red-500/80
-                    transition-transform
-                    duration-500
-                    group-hover:scale-x-100
-                  "
-                />
-              </a>
-            </div>
-
-            {/* ELSEWHERE */}
-
-            <div ref={socialsRef}>
-              <span
-                className="
-                  mb-5
-                  block
-                  font-[doner]
-                  text-[8px]
-                  uppercase
-                  tracking-[0.22em]
-                  text-[#F1F0EC]/22
-                "
-              >
-                Elsewhere
-              </span>
-
-              <div
-                className="
-                  flex
-                  flex-wrap
-                  gap-x-6
-                  gap-y-2
-                "
-              >
-                {SOCIAL_LINKS.map(
-                  (item) => (
-                    <a
-                      key={item.label}
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onMouseEnter={
-                        handleLinkEnter
-                      }
-                      onMouseLeave={
-                        handleLinkLeave
-                      }
-                      className="
-                        group
-                        relative
-                        flex
-                        items-center
-                        gap-2
-                        py-1
-                        font-[doner]
-                        text-sm
-                        tracking-wide
-                        text-[#F1F0EC]/55
-                        transition-colors
-                        duration-300
-                        hover:text-[#F1F0EC]
-                        sm:text-[15px]
-                      "
-                    >
-                      <span>
-                        {item.label}
-                      </span>
-
-                      <span
-                        className="
-                          footer-arrow
-                          text-[9px]
-                          text-red-500
-                          opacity-0
-                        "
-                      >
-                        ↗
-                      </span>
-
-                      <span
-                        className="
-                          absolute
-                          bottom-0
-                          left-0
-                          h-px
-                          w-full
-                          origin-left
-                          scale-x-0
-                          bg-[#F1F0EC]/50
-                          transition-transform
-                          duration-500
-                          group-hover:scale-x-100
-                        "
-                      />
-                    </a>
-                  )
-                )}
-              </div>
+                  </a>
+                )
+              )}
             </div>
           </div>
+        </div>
 
-          {/* BOTTOM BAR */}
+        {/* BOTTOM BAR */}
 
+        <div
+          ref={bottomRef}
+          className="
+            flex
+            flex-col
+            gap-5
+            border-t
+            border-[#F1F0EC]/10
+            pt-5
+            sm:flex-row
+            sm:items-center
+            sm:justify-between
+          "
+        >
           <div
-            ref={bottomRef}
             className="
               flex
-              flex-col
-              gap-5
-              border-t
-              border-[#F1F0EC]/10
-              pt-5
-              sm:flex-row
-              sm:items-center
-              sm:justify-between
+              items-center
+              gap-4
+              font-[doner]
+              text-[8px]
+              uppercase
+              tracking-[0.18em]
+              text-[#F1F0EC]/22
+              sm:text-[9px]
             "
           >
-            {/* LEFT */}
-
-            <div
-              className="
-                flex
-                items-center
-                gap-4
-                font-[doner]
-                text-[8px]
-                uppercase
-                tracking-[0.18em]
-                text-[#F1F0EC]/22
-                sm:text-[9px]
-              "
-            >
-              <span>
-                Taha Hassan
-              </span>
-
-              <span
-                className="
-                  h-3
-                  w-px
-                  bg-[#F1F0EC]/10
-                "
-              />
-
-              <span>
-                Karachi · Pakistan
-              </span>
-            </div>
-
-            {/* CENTER */}
+            <span>
+              Taha Hassan
+            </span>
 
             <span
               className="
-                font-[doner]
-                text-[8px]
-                uppercase
-                tracking-[0.18em]
-                text-[#F1F0EC]/18
-                sm:text-[9px]
+                h-3
+                w-px
+                bg-[#F1F0EC]/10
               "
-            >
-              © {new Date().getFullYear()}
+            />
+
+            <span>
+              Karachi · Pakistan
             </span>
+          </div>
 
-            {/* BACK TO TOP */}
+          <span
+            className="
+              font-[doner]
+              text-[8px]
+              uppercase
+              tracking-[0.18em]
+              text-[#F1F0EC]/18
+              sm:text-[9px]
+            "
+          >
+            © {new Date().getFullYear()}
+          </span>
 
-            <button
-              ref={backTopRef}
-              type="button"
-              onClick={() =>
-                smoothScrollTo("top")
-              }
-              onMouseEnter={
-                handleBackTopEnter
-              }
-              onMouseLeave={
-                handleBackTopLeave
-              }
-              aria-label="Back to top"
+          <button
+            ref={backTopRef}
+            type="button"
+            onClick={() =>
+              smoothScrollTo("top")
+            }
+            onMouseEnter={
+              handleBackTopEnter
+            }
+            onMouseLeave={
+              handleBackTopLeave
+            }
+            aria-label="Back to top"
+            className="
+              group
+              relative
+              flex
+              h-12
+              w-12
+              cursor-pointer
+              items-center
+              justify-center
+              self-start
+              rounded-full
+              outline-none
+              focus-visible:ring-1
+              focus-visible:ring-[#F1F0EC]/60
+              sm:self-auto
+            "
+          >
+            <span
               className="
-                group
-                relative
-                flex
-                h-12
-                w-12
-                cursor-pointer
-                items-center
-                justify-center
-                self-start
+                back-top-ring
+                absolute
+                inset-0
                 rounded-full
-                outline-none
-                focus-visible:ring-1
-                focus-visible:ring-[#F1F0EC]/60
-                sm:self-auto
+                border
+                border-[#F1F0EC]/15
+                transition-colors
+                duration-500
+                group-hover:border-[#F1F0EC]/65
+                group-hover:bg-[#F1F0EC]
+              "
+            />
+
+            <span
+              className="
+                back-top-arrow
+                relative
+                z-10
+                font-[doner]
+                text-base
+                leading-none
+                text-[#F1F0EC]
+                transition-colors
+                duration-500
+                group-hover:text-[#080808]
               "
             >
-              <span
-                className="
-                  back-top-ring
-                  absolute
-                  inset-0
-                  rounded-full
-                  border
-                  border-[#F1F0EC]/15
-                  transition-colors
-                  duration-500
-                  group-hover:border-[#F1F0EC]/65
-                  group-hover:bg-[#F1F0EC]
-                "
-              />
-
-              <span
-                className="
-                  back-top-arrow
-                  relative
-                  z-10
-                  font-[doner]
-                  text-base
-                  leading-none
-                  text-[#F1F0EC]
-                  transition-colors
-                  duration-500
-                  group-hover:text-[#080808]
-                "
-              >
-                ↑
-              </span>
-            </button>
-          </div>
+              ↑
+            </span>
+          </button>
         </div>
       </div>
     </footer>

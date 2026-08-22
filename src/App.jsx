@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import Navbar from "./components/navigation/Navbar";
-import Footer from "./components/footer/Footer";
+import Footer from "./components/common/Footer";
 import Preloader from "./components/common/Preloader";
 
 import About from "./pages/About";

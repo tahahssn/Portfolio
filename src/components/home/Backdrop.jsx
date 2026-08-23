@@ -5,7 +5,7 @@ import {
   FilesetResolver,
 } from "@mediapipe/tasks-vision";
 
-const heroImage = "/images/PNGs/herobg1.png";
+const heroImage = "/images/herobg1.avif";
 
 const FACE_MODEL =
   "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite";

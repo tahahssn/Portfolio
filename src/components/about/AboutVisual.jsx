@@ -8,7 +8,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const heroImage = "/images/PNGs/herobg1.png";
+const heroImage = "/images/herobg1.avif";
 
 const AboutVisual = () => {
   const sectionRef = useRef(null);

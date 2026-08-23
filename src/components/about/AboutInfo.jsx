@@ -1,6 +1,6 @@
 import React from "react";
 
-const heroImage = "/images/PNGs/herobg1.png";
+const heroImage = "/images/herobg1.avif";
 
 const AboutInfo = () => {
   return (

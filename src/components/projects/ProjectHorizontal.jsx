@@ -431,7 +431,7 @@ const ProjectHorizontal = () => {
             Math.max(
               0,
               track.scrollWidth -
-                window.innerWidth
+              window.innerWidth
             );
 
         /*

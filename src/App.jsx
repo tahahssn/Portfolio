@@ -1,46 +1,16 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useState } from "react";
 
 import Navbar from "./components/navigation/Navbar";
-import Footer from "./components/common/Footer";
 import Preloader from "./components/common/Preloader";
 import CustomCursor from "./components/common/CustomCursor";
-
-import About from "./pages/About";
 import Hero from "./pages/Hero";
-import Projects from "./pages/Projects";
+
+const About = lazy(() => import("./pages/About"));
+const Projects = lazy(() => import("./pages/Projects"));
+const Footer = lazy(() => import("./components/common/Footer"));
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-
-    const duration = 2500;
-    const step = 50;
-
-    let elapsed = 0;
-
-    const interval = setInterval(() => {
-      elapsed += step;
-
-      const value = Math.min(
-        (elapsed / duration) * 100,
-        100
-      );
-
-      setProgress(value);
-
-      if (value >= 100) {
-        clearInterval(interval);
-      }
-    }, step);
-
-    return () => {
-      clearInterval(interval);
-      document.body.style.overflow = "";
-    };
-  }, []);
 
   const handlePreloaderComplete = () => {
     setIsLoading(false);
@@ -69,7 +39,9 @@ function App() {
             id="about"
             className="relative min-h-screen overflow-visible"
           >
-            <About />
+            <Suspense fallback={<div className="min-h-screen bg-[#080808]" />}>
+              <About />
+            </Suspense>
           </section>
 
           {/* PROJECTS */}
@@ -78,7 +50,9 @@ function App() {
             id="projects"
             className="min-h-screen overflow-hidden"
           >
-            <Projects />
+            <Suspense fallback={<div className="min-h-screen bg-[#080808]" />}>
+              <Projects />
+            </Suspense>
           </section>
 
           {/* CONTACT */}
@@ -87,14 +61,15 @@ function App() {
             id="contact"
             className="min-h-screen overflow-hidden"
           >
-            <Footer />
+            <Suspense fallback={<div className="min-h-screen bg-[#080808]" />}>
+              <Footer />
+            </Suspense>
           </section>
         </main>
       </div>
 
       {isLoading && (
         <Preloader
-          percentage={progress}
           onComplete={handlePreloaderComplete}
         />
       )}

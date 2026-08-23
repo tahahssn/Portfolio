@@ -1192,7 +1192,7 @@ const Backdrop = () => {
             (
               box.originX +
               box.width *
-                0.5
+              0.5
             ) /
             imageWidth;
 
@@ -1201,7 +1201,7 @@ const Backdrop = () => {
             (
               box.originY +
               box.height *
-                0.5
+              0.5
             ) /
             imageHeight;
 
@@ -1240,10 +1240,10 @@ const Backdrop = () => {
           bodyCenter.set(
             centerX,
             centerY -
-              Math.max(
-                height * 1.65,
-                0.20
-              )
+            Math.max(
+              height * 1.65,
+              0.20
+            )
           );
 
           bodySize.set(

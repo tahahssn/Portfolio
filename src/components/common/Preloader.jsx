@@ -28,8 +28,9 @@ const stairVariants = {
   }),
 };
 
-const Preloader = ({ percentage, onComplete }) => {
+const Preloader = ({ onComplete }) => {
   const barRef = useRef(null);
+  const percentTextRef = useRef(null);
 
   const [phase, setPhase] = useState("loading");
 
@@ -39,41 +40,35 @@ const Preloader = ({ percentage, onComplete }) => {
   useEffect(() => {
     document.body.style.overflow = "hidden";
 
+    const duration = 2500;
+    const step = 50;
+    let elapsed = 0;
+
+    const interval = setInterval(() => {
+      elapsed += step;
+      const value = Math.min((elapsed / duration) * 100, 100);
+
+      if (percentTextRef.current) {
+        percentTextRef.current.textContent = `${Math.floor(value)}%`;
+      }
+      if (barRef.current) {
+        barRef.current.style.width = `${value}%`;
+      }
+
+      if (value >= 100) {
+        clearInterval(interval);
+        setTimeout(() => {
+          completedColumns.current = 0;
+          setPhase("cover");
+        }, 300);
+      }
+    }, step);
+
     return () => {
+      clearInterval(interval);
       document.body.style.overflow = "";
     };
   }, []);
-
-  /*
-   * Progress bar.
-   */
-
-  useEffect(() => {
-    if (!barRef.current) return;
-
-    gsap.to(barRef.current, {
-      width: `${percentage}%`,
-      duration: 0.1,
-      ease: "none",
-      overwrite: true,
-    });
-  }, [percentage]);
-
-  /*
-   * 100% → tiny pause → stair cover.
-   */
-
-  useEffect(() => {
-    if (percentage < 100) return;
-    if (phase !== "loading") return;
-
-    const timer = setTimeout(() => {
-      completedColumns.current = 0;
-      setPhase("cover");
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [percentage, phase]);
 
   /*
    * Count the stairs while they move UP.
@@ -140,8 +135,11 @@ const Preloader = ({ percentage, onComplete }) => {
       {showLoader && (
         <div className="absolute inset-0 z-10 bg-black">
 
-          <div className="absolute bottom-4 right-8 font-[honer-those] text-[5.5rem] font-thin leading-none text-white/70 max-md:right-6 max-md:text-[4rem] max-sm:right-4 max-sm:text-[3rem]">
-            {Math.floor(percentage)}%
+          <div
+            ref={percentTextRef}
+            className="absolute bottom-4 right-8 font-[honer-those] text-[5.5rem] font-thin leading-none text-white/70 max-md:right-6 max-md:text-[4rem] max-sm:right-4 max-sm:text-[3rem]"
+          >
+            0%
           </div>
 
           <div className="absolute bottom-0 left-0 h-[2px] w-full bg-white/10">

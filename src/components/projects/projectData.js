@@ -3,7 +3,7 @@ const projects = [
     id: "01",
     name: "Derivium",
     category: "WEB / 3D / MATH",
-    year: "2026",
+    year: "2025",
 
     description:
       "An interactive calculus environment that turns abstract mathematics into something visual and explorable.",
@@ -22,23 +22,23 @@ const projects = [
     description:
       "An in-browser data compression tool using Huffman encoding, built in Rust and compiled to WebAssembly.",
 
-    image: "/images/projects/rustedzip.avif",
+    image: "/images/projects/rusted-zip.avif",
 
     href: "https://github.com/maazbse/rusted-zip",
   },
 
   {
     id: "03",
-    name: "CardioRisk AI",
+    name: "Under The Hammer",
     category: "AI / ML / DATA",
-    year: "2026",
+    year: "Comming Soon",
 
     description:
-      "A machine-learning application built around data, prediction and an approachable user experience.",
+      "A PSL auction simulation engine that combines player performance data, role-based valuation and machine-learning pricing to predict auction value and simulate the winning bid.",
 
-    image: "/images/projects/rustedzip.avif",
+    image: "/images/projects/underthehammer.avif",
 
-    href: "https://cardioriskai.streamlit.app/",
+    href: "https://underthehammer.streamlit.app/",
   },
 
   {

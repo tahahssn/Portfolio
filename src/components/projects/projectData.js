@@ -1,6 +1,20 @@
 const projects = [
   {
     id: "01",
+    name: "SanitizePy",
+    category: "Open Source / AI / ML / Data",
+    year: "2026",
+
+    description:
+    "An open-source Python engine for automated tabular data quality inspection, explainable cleaning, and preprocessing. SanitizePy systematically analyzes, validates, scores, and improves structured datasets before they enter analytics or ML pipelines—detecting duplicates, missing values, type inconsistencies, anomalies, and text quality issues with severity and evidence-based reporting.",
+
+    image: "/images/projects/sanitizepy.avif",
+
+    href: "https://github.com/tahahssn/sanitizepy",
+  },
+
+  {
+    id: "02",
     name: "Derivium",
     category: "WEB / 3D / MATH",
     year: "2025",
@@ -14,7 +28,7 @@ const projects = [
   },
 
   {
-    id: "02",
+    id: "03",
     name: "Rusted-Zip",
     category: "RUST / WEBASSEMBLY / DATA COMPRESSION",
     year: "2026",
@@ -25,20 +39,6 @@ const projects = [
     image: "/images/projects/rusted-zip.avif",
 
     href: "https://github.com/maazbse/rusted-zip",
-  },
-
-  {
-    id: "03",
-    name: "Under The Hammer",
-    category: "AI / ML / DATA",
-    year: "Comming Soon",
-
-    description:
-      "A PSL auction simulation engine that combines player performance data, role-based valuation and machine-learning pricing to predict auction value and simulate the winning bid.",
-
-    image: "/images/projects/underthehammer.avif",
-
-    href: "https://underthehammer.streamlit.app/",
   },
 
   {

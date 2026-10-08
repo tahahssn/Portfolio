@@ -6,7 +6,7 @@ const projects = [
     year: "2026",
 
     description:
-    "An open-source Python engine for automated tabular data quality inspection, explainable cleaning, and preprocessing. SanitizePy systematically analyzes, validates, scores, and improves structured datasets before they enter analytics or ML pipelines—detecting duplicates, missing values, type inconsistencies, anomalies, and text quality issues with severity and evidence-based reporting.",
+    "An open-source Python engine that automatically inspects and cleans tabular data, delivering clear, explainable reports.",
 
     image: "/images/projects/sanitizepy.avif",
 

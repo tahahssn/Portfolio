@@ -1,17 +1,7 @@
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import {
-  FaceDetector,
-  FilesetResolver,
-} from "@mediapipe/tasks-vision";
 
 const heroImage = "/images/herobg1.avif";
-
-const FACE_MODEL =
-  "https://storage.googleapis.com/mediapipe-models/face_detector/blaze_face_short_range/float16/1/blaze_face_short_range.tflite";
-
-const WASM_PATH =
-  "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm";
 
 const Backdrop = () => {
   const containerRef = useRef(null);
@@ -28,12 +18,10 @@ const Backdrop = () => {
   const materialRef = useRef(null);
   const geometryRef = useRef(null);
   const textureRef = useRef(null);
-  const detectorRef = useRef(null);
 
   const animationFrameRef = useRef(0);
   const destroyedRef = useRef(false);
   const initializedRef = useRef(false);
-  const detectingRef = useRef(false);
 
   /*
    * Face data
@@ -201,17 +189,8 @@ const Backdrop = () => {
         return;
       }
 
-      const rect =
-        container.getBoundingClientRect();
-
-      const x =
-        (event.clientX - rect.left) /
-        rect.width;
-
-      const y =
-        1 -
-        (event.clientY - rect.top) /
-        rect.height;
+      const x = event.clientX / window.innerWidth;
+      const y = 1 - event.clientY / window.innerHeight;
 
       targetMouse.set(x, y);
 
@@ -989,321 +968,6 @@ const Backdrop = () => {
 
     /*
      * ==========================================================
-     * FACE DETECTOR
-     * ==========================================================
-     */
-
-    const loadDetector =
-      async () => {
-        if (
-          destroyedRef.current ||
-          detectorRef.current
-        ) {
-          return detectorRef.current;
-        }
-
-        const vision =
-          await FilesetResolver.forVisionTasks(
-            WASM_PATH
-          );
-
-        if (
-          destroyedRef.current
-        ) {
-          return null;
-        }
-
-        const detector =
-          await FaceDetector.createFromOptions(
-            vision,
-            {
-              baseOptions: {
-                modelAssetPath:
-                  FACE_MODEL,
-              },
-
-              runningMode: "IMAGE",
-
-              minDetectionConfidence:
-                0.25,
-
-              minSuppressionThreshold:
-                0.30,
-            }
-          );
-
-        if (
-          destroyedRef.current
-        ) {
-          detector.close();
-          return null;
-        }
-
-        detectorRef.current =
-          detector;
-
-        return detector;
-      };
-
-    /*
-     * ==========================================================
-     * FACE DETECTION WITH RETRIES
-     * ==========================================================
-     */
-
-    const detectFace =
-      async () => {
-        if (
-          detectingRef.current ||
-          destroyedRef.current
-        ) {
-          return;
-        }
-
-        detectingRef.current =
-          true;
-
-        try {
-          const image =
-            new Image();
-
-          image.src =
-            heroImage;
-
-          /*
-           * decode() is more reliable than relying only on
-           * onload for this kind of startup asset.
-           */
-
-          await new Promise(
-            (
-              resolve,
-              reject
-            ) => {
-              image.onload =
-                resolve;
-
-              image.onerror =
-                reject;
-            }
-          );
-
-          if (
-            image.decode
-          ) {
-            try {
-              await image.decode();
-            } catch {
-              // onload already completed; continue
-            }
-          }
-
-          const detector =
-            await loadDetector();
-
-          if (
-            !detector ||
-            destroyedRef.current
-          ) {
-            return;
-          }
-
-          /*
-           * Try the detector up to three times.
-           *
-           * This is especially useful for your heavily
-           * distorted portrait.
-           */
-
-          let result = null;
-
-          for (
-            let attempt = 0;
-            attempt < 3;
-            attempt++
-          ) {
-            if (
-              destroyedRef.current
-            ) {
-              return;
-            }
-
-            result =
-              detector.detect(
-                image
-              );
-
-            if (
-              result?.detections?.length
-            ) {
-              break;
-            }
-
-            await new Promise(
-              (resolve) =>
-                setTimeout(
-                  resolve,
-                  80
-                )
-            );
-          }
-
-          if (
-            !result?.detections?.length
-          ) {
-            console.warn(
-              "Hero face detection did not find a face after 3 attempts. Keeping fallback region."
-            );
-
-            return;
-          }
-
-          /*
-           * Prefer the highest confidence detection.
-           */
-
-          const detection =
-            [...result.detections].sort(
-              (a, b) =>
-                (
-                  b.categories?.[0]
-                    ?.score ?? 0
-                ) -
-                (
-                  a.categories?.[0]
-                    ?.score ?? 0
-                )
-            )[0];
-
-          const box =
-            detection?.boundingBox;
-
-          if (!box) {
-            return;
-          }
-
-          const imageWidth =
-            image.naturalWidth;
-
-          const imageHeight =
-            image.naturalHeight;
-
-          const centerX =
-            (
-              box.originX +
-              box.width *
-              0.5
-            ) /
-            imageWidth;
-
-          const centerY =
-            1 -
-            (
-              box.originY +
-              box.height *
-              0.5
-            ) /
-            imageHeight;
-
-          const width =
-            box.width /
-            imageWidth;
-
-          const height =
-            box.height /
-            imageHeight;
-
-          /*
-           * Face + hair.
-           */
-
-          faceCenter.set(
-            centerX,
-            centerY
-          );
-
-          faceSize.set(
-            Math.max(
-              width * 2.05,
-              0.16
-            ),
-            Math.max(
-              height * 2.35,
-              0.24
-            )
-          );
-
-          /*
-           * Upper body + neck.
-           */
-
-          bodyCenter.set(
-            centerX,
-            centerY -
-            Math.max(
-              height * 1.65,
-              0.20
-            )
-          );
-
-          bodySize.set(
-            Math.max(
-              width * 3.6,
-              0.36
-            ),
-            Math.max(
-              height * 4.5,
-              0.48
-            )
-          );
-
-          material.uniforms
-            .uFaceCenter
-            .value
-            .copy(
-              faceCenter
-            );
-
-          material.uniforms
-            .uFaceSize
-            .value
-            .copy(
-              faceSize
-            );
-
-          material.uniforms
-            .uBodyCenter
-            .value
-            .copy(
-              bodyCenter
-            );
-
-          material.uniforms
-            .uBodySize
-            .value
-            .copy(
-              bodySize
-            );
-        } catch (error) {
-          console.warn(
-            "Hero face detection failed. Using fallback region.",
-            error
-          );
-        } finally {
-          detectingRef.current =
-            false;
-        }
-      };
-
-    /*
-     * Start detection without making it part of the
-     * animation loop.
-     */
-
-    detectFace();
-
-    /*
-     * ==========================================================
      * ANIMATION
      * ==========================================================
      */
@@ -1400,23 +1064,6 @@ const Backdrop = () => {
         "webglcontextrestored",
         handleContextRestored
       );
-
-      /*
-       * Detector closes ONLY on actual component cleanup.
-       */
-
-      if (
-        detectorRef.current
-      ) {
-        try {
-          detectorRef.current.close();
-        } catch {
-          // already closed
-        }
-
-        detectorRef.current =
-          null;
-      }
 
       geometry?.dispose();
       material?.dispose();

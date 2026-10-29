@@ -562,11 +562,6 @@ const Navbar = () => {
             type="button"
             onClick={() => setIsOpen((prev) => !prev)}
             aria-expanded={isOpen}
-            aria-label={
-              isOpen
-                ? "Close navigation"
-                : "Open navigation"
-            }
             className="group flex items-center gap-3 text-white"
           >
             <span className="font-[doner] text-[11px] uppercase tracking-[0.24em] sm:text-xs">

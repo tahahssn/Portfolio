@@ -1015,7 +1015,7 @@ const ProjectHorizontal = () => {
                     {project.category}
                   </p>
 
-                  <h3
+                  <h2
                     data-project-title
                     className="
                       font-[Arial]
@@ -1032,7 +1032,7 @@ const ProjectHorizontal = () => {
                     "
                   >
                     {project.name}
-                  </h3>
+                  </h2>
 
                   <p
                     className="
